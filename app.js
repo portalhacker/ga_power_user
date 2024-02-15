@@ -176,28 +176,28 @@ async function insertAccountSummariesIntoPage(accountSummaries) {
             var homePageLink = document.createElement('a');
             homePageLink.setAttribute('href', `https://analytics.google.com/analytics/web/#/p${propertyId}`);
             homePageLink.setAttribute('target', '_blank');
-            homePageLink.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M5 12H3l9-9l9 9h-2M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/><path d="M9 21v-6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v6"/></g></svg>';
+            homePageLink.innerHTML = '<img src="images/icons/home.svg" alt="Home Page">'
             propertyHomePage.appendChild(homePageLink);
 
             var propertyReportsPage = document.createElement('td');
             var reportsLink = document.createElement('a');
             reportsLink.setAttribute('href', `https://analytics.google.com/analytics/web/#/p${propertyId}/reports/reportinghub`);
             homePageLink.setAttribute('target', '_blank');
-            reportsLink.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2m0 4v4h6V8zm8 0v4h6V8zm-8 6v4h6v-4zm8 0v4h6v-4z"/></svg>'
+            reportsLink.innerHTML = '<img src="images/icons/reports.svg" alt="Reports Page">'
             propertyReportsPage.appendChild(reportsLink);
 
             var propertyExplorePage = document.createElement('td');
             var exploreLink = document.createElement('a');
             exploreLink.setAttribute('href', `https://analytics.google.com/analytics/web/#/analysis/p${propertyId}`);
             homePageLink.setAttribute('target', '_blank');
-            exploreLink.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m21 21l-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607"/></svg>'
+            exploreLink.innerHTML = '<img src="images/icons/explore.svg" alt="Explore Page">'
             propertyExplorePage.appendChild(exploreLink);
 
             var propertyAdminPage = document.createElement('td');
             var adminLink = document.createElement('a');
             adminLink.setAttribute('href', `https://analytics.google.com/analytics/web/#/p${propertyId}/admin`);
             homePageLink.setAttribute('target', '_blank');
-            adminLink.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 10h3V7L6.5 3.5a6 6 0 0 1 8 8l6 6a2 2 0 0 1-3 3l-6-6a6 6 0 0 1-8-8z"/></svg>'
+            adminLink.innerHTML = '<img src="images/icons/admin.svg" alt="Admin Page">'
             propertyAdminPage.appendChild(adminLink);
 
             // var createEventsPage = document.createElement('td');
