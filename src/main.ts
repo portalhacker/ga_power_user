@@ -1,8 +1,10 @@
 import './style.css'
 
-import { oauthSignIn } from './google'
+import { displayOauthSignIn, saveCredentials } from './google'
 
 // import gaAmdinIcon from '/icons/ga_admin.svg'
+
+const app = document.querySelector<HTMLDivElement>('#app')
 
 // interface GaProperty {
 //   accountId: string
@@ -34,15 +36,11 @@ function initEmptyTable() {
   return table
 }
 
-document.querySelector<HTMLDivElement>('#app')!.appendChild(initEmptyTable())
+app!.appendChild(initEmptyTable())
 
-const googleCredentials = localStorage.getItem('google_crentials');
-if (!googleCredentials) {
-  const popover = document.createElement('div')
-  popover.setAttribute('class', 'popover')
-  popover.innerHTML = `
-    <h1>Authorize Google Analytics</h1>
-    <button onclick="">Authorize</button>
-  `
-  document.querySelector<HTMLDivElement>('#app')!.appendChild(popover)
+if (window.location.hash!.includes('googleapis.com')) {
+  saveCredentials()
 }
+
+const googleCredentials = localStorage.getItem('google_credentials');
+if (!googleCredentials) displayOauthSignIn(app!)
