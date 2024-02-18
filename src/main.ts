@@ -1,6 +1,7 @@
 import './style.css'
 
 import { displayOauthSignIn, saveCredentials, getAccounts, getProperties } from './google'
+import { sortArrayByProperty } from './utilities'
 
 // import gaAmdinIcon from '/icons/ga_admin.svg'
 
@@ -52,15 +53,20 @@ declare global {
 }
 
 (async function getGA4() {
-  window.ga4 = await getAccounts()
-  for (let account of window.ga4) {
-    account.properties = await getProperties(account.name);
-    if (!account.properties) continue;
+  window.ga4 = await getAccounts();
+  if (!window.ga4) return;
+  window.ga4 = sortArrayByProperty(window.ga4, 'displayName')
+
+
+  await Promise.all(window.ga4.map(async (account: any) => {
+    account.properties = await getProperties(account.name)
+    if (!account.properties) return;
+    account.properties = sortArrayByProperty(account.properties, 'displayName')
     for (let property of account.properties) {
       property.propertyId = property.name.split('/')[1]
     }
-  }
-  displayProperties();
+  }))
+  displayProperties()
 })();
 
 function displayProperties() {
@@ -74,7 +80,7 @@ function displayProperties() {
     </tr>
   `
   for (let account of window.ga4) {
-    if (!account.properties) continue;
+    if (!account.properties || account.properties.length === 0) continue;
     for (let property of account.properties) {
       let row = document.createElement('tr')
       row.innerHTML = `
