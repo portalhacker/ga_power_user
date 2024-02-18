@@ -124,3 +124,40 @@ export async function getProperties(accountName: string) {
         console.error('Error fetching properties', body);
     }
 }
+
+export async function getData(propertyId: string, dimension: String, metric: String, dateRanges: Object) {
+    const credentials = localStorage.getItem('google_credentials');
+    if (!credentials) return;
+    const params = JSON.parse(credentials);
+    const accessToken = params.access_token;
+
+    const url = `/api-ga4-data/properties/${propertyId}/:runReport`;
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Application': 'application/json',
+        },
+        body: JSON.stringify({
+            "dimensions": { "name": dimension },
+            "metrics": { "name": metric },
+            "dateRanges": dateRanges,
+        }),
+    });
+    const body = await response.json();
+
+    if (response.ok) {
+        return body;
+    } else if (response.status === 401) {
+        console.error('Unauthorized. Removing credentials...');
+        localStorage.removeItem('google_credentials');
+        window.location.reload();
+    } else if (response.status === 429) {
+        return { rows: [ { metricValues: [ { 'value': 'Not available' } ] } ]}
+        // console.error('Too many requests.', propertyId);
+        // await new Promise(r => setTimeout(r, 1000));
+        // return getData(propertyId, dimension, metric, dateRanges);
+    } else {
+        throw new Error('Error fetching data');
+    }
+}

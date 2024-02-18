@@ -1,6 +1,6 @@
 import './style.css'
 
-import { displayOauthSignIn, saveCredentials, getAccounts, getProperties } from './google'
+import { displayOauthSignIn, saveCredentials, getAccounts, getProperties, getData } from './google'
 import { sortArrayByProperty } from './utilities'
 
 // import gaAmdinIcon from '/icons/ga_admin.svg'
@@ -64,6 +64,15 @@ declare global {
     account.properties = sortArrayByProperty(account.properties, 'displayName')
     for (let property of account.properties) {
       property.propertyId = property.name.split('/')[1]
+      property.sessionsYesterday = await getData(
+        property.propertyId,
+        'date',
+        'sessions', 
+        { 
+          startDate: 'yesterday', 
+          endDate: 'yesterday'
+        }
+      ).then((data: any) => data?.rows?.[0]?.metricValues?.[0]?.value)
     }
   }))
   displayProperties()
@@ -89,7 +98,7 @@ function displayProperties() {
         <td>
           <a href="https://analytics.google.com/analytics/web/#/p${property.propertyId}/reports" target="_blank">View</a>
         </td>
-        <td></td>
+        <td>${property.sessionsYesterday || 0}</td>
       `
       table.appendChild(row)
     }
