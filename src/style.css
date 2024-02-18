@@ -214,6 +214,17 @@ a {
 a:hover {
     color: var(--primary-500);
 }
+input[type="text"] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    color: var(--text-950);
+    background-color: var(--secondary-200);
+    border: 2px solid var(--secondary-400);
+    border-radius: 5px;
+    box-sizing: border-box;
+}
 
 .popover {
     position: absolute;

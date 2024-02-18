@@ -7,12 +7,23 @@ import { sortArrayByProperty } from './utilities'
 
 const app = document.querySelector<HTMLDivElement>('#app')
 
-// interface GaProperty {
-//   accountId: string
-//   accountName: string
-//   propertyId: string
-//   propertyName: string
-// }
+function searchTable(pattern: string) {
+  let table = app!.querySelector('table')!
+  let rows = Array.from(table.querySelectorAll('tr'))
+  rows.shift()
+  rows.forEach(row => {
+    let rowText = Array.from(row.querySelectorAll('td')).map(td => td.textContent).join(' ')
+    row.style.display = rowText.match(new RegExp(pattern, 'i')) ? '' : 'none'
+  })
+}
+
+let searchField = document.createElement('input');
+searchField.type = 'text';
+searchField.placeholder = 'Search';
+searchField.addEventListener('input', () => searchTable(searchField.value))
+app!.insertBefore(searchField, app!.firstChild)
+
+
 
 function initEmptyTable() {
   let table = document.createElement('table')
@@ -87,7 +98,7 @@ declare global {
 })();
 
 function displayProperties() {
-  let table = document.createElement('table')
+  let table = document.createElement('table');
   table.innerHTML = `
     <tr>
       <th>Account name</th>
@@ -156,5 +167,5 @@ function displayProperties() {
       table.appendChild(row)
     }
   }
-  app!.replaceChild(table, app!.firstChild!)
+  app!.replaceChild(table, app!.querySelector('table')!)
 };

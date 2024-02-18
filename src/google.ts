@@ -76,7 +76,11 @@ export async function getAccounts() {
     if (!credentials) return;
     const params = JSON.parse(credentials);
     const accessToken = params.access_token;
-    const url = '/api-ga4-admin/accounts';
+
+    const queryParams = new URLSearchParams({
+        'pageSize': '200',
+    });
+    const url = `/api-ga4-admin/accounts?${queryParams.toString()}`;
     const response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -102,10 +106,12 @@ export async function getProperties(accountName: string) {
     const params = JSON.parse(credentials);
     const accessToken = params.access_token;
 
-    const urlParams = new URLSearchParams({ 
+    const queryParams = new URLSearchParams({ 
         filter: `parent:${accountName}`,
+        pageSize: '200',
     });
-    const url = `/api-ga4-admin/properties?${urlParams.toString()}`;
+
+    const url = `/api-ga4-admin/properties?${queryParams.toString()}`;
     const response = await fetch(url, {
         method: 'GET',
         headers: {
