@@ -1,6 +1,6 @@
 import './style.css'
 
-import { displayOauthSignIn, saveCredentials } from './google'
+import { displayOauthSignIn, saveCredentials, getAccounts, getProperties } from './google'
 
 // import gaAmdinIcon from '/icons/ga_admin.svg'
 
@@ -43,4 +43,50 @@ if (window.location.hash!.includes('googleapis.com')) {
 }
 
 const googleCredentials = localStorage.getItem('google_credentials');
-if (!googleCredentials) displayOauthSignIn(app!)
+if (!googleCredentials) displayOauthSignIn(app!);
+
+declare global {
+  interface Window {
+    ga4: any;
+  }
+}
+
+(async function getGA4() {
+  window.ga4 = await getAccounts()
+  for (let account of window.ga4) {
+    account.properties = await getProperties(account.name);
+    if (!account.properties) continue;
+    for (let property of account.properties) {
+      property.propertyId = property.name.split('/')[1]
+    }
+  }
+  displayProperties();
+})();
+
+function displayProperties() {
+  let table = document.createElement('table')
+  table.innerHTML = `
+    <tr>
+      <th>Account name</th>
+      <th>Property name</th>
+      <th>Links</th>
+      <th>Sessions yesterday</th>
+    </tr>
+  `
+  for (let account of window.ga4) {
+    if (!account.properties) continue;
+    for (let property of account.properties) {
+      let row = document.createElement('tr')
+      row.innerHTML = `
+        <td>${account.displayName}</td>
+        <td>${property.displayName}</td>
+        <td>
+          <a href="https://analytics.google.com/analytics/web/#/p${property.propertyId}/reports" target="_blank">View</a>
+        </td>
+        <td></td>
+      `
+      table.appendChild(row)
+    }
+  }
+  app!.replaceChild(table, app!.firstChild!)
+};

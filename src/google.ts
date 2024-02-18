@@ -70,3 +70,57 @@ export function saveCredentials() {
         window.location.reload()
     }
 }
+
+export async function getAccounts() {
+    const credentials = localStorage.getItem('google_credentials');
+    if (!credentials) return;
+    const params = JSON.parse(credentials);
+    const accessToken = params.access_token;
+    const url = '/api-ga4-admin/accounts';
+    const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Application': 'application/json',
+        },
+    });
+    const body = await response.json();
+
+    if (response.ok) {
+        return body.accounts;
+    } else if (response.status === 401) {
+        localStorage.removeItem('google_credentials');
+        window.location.reload();
+    } else {
+        console.error('Error fetching accounts', body);
+    }
+}
+
+export async function getProperties(accountName: string) {
+    const credentials = localStorage.getItem('google_credentials');
+    if (!credentials) return;
+    const params = JSON.parse(credentials);
+    const accessToken = params.access_token;
+
+    const urlParams = new URLSearchParams({ 
+        filter: `parent:${accountName}`,
+    });
+    const url = `/api-ga4-admin/properties?${urlParams.toString()}`;
+    const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Application': 'application/json',
+        },
+    });
+    const body = await response.json();
+
+    if (response.ok) {
+        return body.properties;
+    } else if (response.status === 401) {
+        localStorage.removeItem('google_credentials');
+        window.location.reload();
+    } else {
+        console.error('Error fetching properties', body);
+    }
+}
