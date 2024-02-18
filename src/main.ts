@@ -19,7 +19,12 @@ function initEmptyTable() {
   table.innerHTML = `
     <tr>
       <th>Account name</th>
+      <th>Account region</th>
       <th>Property name</th>
+      <th>Property type</th>
+      <th>Property service level</th>
+      <th>Property currency</th>
+      <th>Property timezone</th>
       <th>Links</th>
       <th>Sessions yesterday</th>
     </tr>
@@ -27,6 +32,11 @@ function initEmptyTable() {
   for (let i = 0; i < 5; i++) {
     let row = document.createElement('tr')
     row.innerHTML = `
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
       <td></td>
       <td></td>
       <td></td>
@@ -83,7 +93,12 @@ function displayProperties() {
   table.innerHTML = `
     <tr>
       <th>Account name</th>
+      <th>Account region</th>
       <th>Property name</th>
+      <th>Property type</th>
+      <th>Property service level</th>
+      <th>Property currency</th>
+      <th>Property timezone</th>
       <th>Links</th>
       <th>Sessions yesterday</th>
     </tr>
@@ -94,7 +109,12 @@ function displayProperties() {
       let row = document.createElement('tr')
       row.innerHTML = `
         <td>${account.displayName}</td>
+        <td>${account.regionCode}</td>
         <td>${property.displayName}</td>
+        <td>${property.propertyType}</td>
+        <td>${property.serviceLevel}</td>
+        <td>${property.currencyCode}</td>
+        <td>${property.timeZone}</td>
         <td>
           <a href="https://analytics.google.com/analytics/web/#/p${property.propertyId}/reports" target="_blank">View</a>
         </td>
