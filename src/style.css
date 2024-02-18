@@ -1,33 +1,218 @@
+/* :root[data-theme="light"] {
+    --text-50: #fde7ea;
+    --text-100: #fbd0d6;
+    --text-200: #f7a1ac;
+    --text-300: #f47183;
+    --text-400: #f04259;
+    --text-500: #ec1330;
+    --text-600: #bd0f26;
+    --text-700: #8e0b1d;
+    --text-800: #5e0813;
+    --text-900: #2f040a;
+    --text-950: #180205;
+
+    --background-50: #fde7e9;
+    --background-100: #fccfd3;
+    --background-200: #f8a0a7;
+    --background-300: #f5707b;
+    --background-400: #f2404f;
+    --background-500: #ee1123;
+    --background-600: #bf0d1c;
+    --background-700: #8f0a15;
+    --background-800: #5f070e;
+    --background-900: #300307;
+    --background-950: #180204;
+
+    --primary-50: #fde7e9;
+    --primary-100: #fccfd2;
+    --primary-200: #f99fa5;
+    --primary-300: #f66f78;
+    --primary-400: #f33f4b;
+    --primary-500: #f00f1e;
+    --primary-600: #c00c18;
+    --primary-700: #900912;
+    --primary-800: #60060c;
+    --primary-900: #300306;
+    --primary-950: #180203;
+
+    --secondary-50: #fdf2e7;
+    --secondary-100: #fce4cf;
+    --secondary-200: #f8c9a0;
+    --secondary-300: #f5ae70;
+    --secondary-400: #f29340;
+    --secondary-500: #ee7811;
+    --secondary-600: #bf600d;
+    --secondary-700: #8f480a;
+    --secondary-800: #5f3007;
+    --secondary-900: #301803;
+    --secondary-950: #180c02;
+
+    --accent-50: #fdf4e7;
+    --accent-100: #fceacf;
+    --accent-200: #f9d59f;
+    --accent-300: #f6c06f;
+    --accent-400: #f3ab3f;
+    --accent-500: #f0960f;
+    --accent-600: #c0780c;
+    --accent-700: #905a09;
+    --accent-800: #603c06;
+    --accent-900: #301e03;
+    --accent-950: #180f02;
+} */
+:root /*[data-theme="dark"]*/ {
+    --text-50: #180205;
+    --text-100: #2f040a;
+    --text-200: #5e0813;
+    --text-300: #8e0b1d;
+    --text-400: #bd0f26;
+    --text-500: #ec1330;
+    --text-600: #f04259;
+    --text-700: #f47183;
+    --text-800: #f7a1ac;
+    --text-900: #fbd0d6;
+    --text-950: #fde7ea;
+
+    --background-50: #180205;
+    --background-100: #300309;
+    --background-200: #600612;
+    --background-300: #90091b;
+    --background-400: #c00c24;
+    --background-500: #f00f2d;
+    --background-600: #f33f57;
+    --background-700: #f66f81;
+    --background-800: #f99fab;
+    --background-900: #fccfd5;
+    --background-950: #fde7ea;
+
+    --primary-50: #180203;
+    --primary-100: #300306;
+    --primary-200: #60060c;
+    --primary-300: #900912;
+    --primary-400: #c00c18;
+    --primary-500: #f00f1e;
+    --primary-600: #f33f4b;
+    --primary-700: #f66f78;
+    --primary-800: #f99fa5;
+    --primary-900: #fccfd2;
+    --primary-950: #fde7e9;
+
+    --secondary-50: #180c02;
+    --secondary-100: #301803;
+    --secondary-200: #5f3007;
+    --secondary-300: #8f480a;
+    --secondary-400: #bf600d;
+    --secondary-500: #ee7811;
+    --secondary-600: #f29340;
+    --secondary-700: #f5ae70;
+    --secondary-800: #f8c9a0;
+    --secondary-900: #fce4cf;
+    --secondary-950: #fdf2e7;
+
+    --accent-50: #180f02;
+    --accent-100: #301e03;
+    --accent-200: #603c06;
+    --accent-300: #905a09;
+    --accent-400: #c0780c;
+    --accent-500: #f0960f;
+    --accent-600: #f3ab3f;
+    --accent-700: #f6c06f;
+    --accent-800: #f9d59f;
+    --accent-900: #fceacf;
+    --accent-950: #fdf4e7;
+
+    font-family: Arial, Helvetica, sans-serif;
+}  
+
+/* body {
+    font-family: 'Noto Sans Siddham', Arial, sans-serif;
+    font-weight: 400;
+} */
+
+
+h1, h2, h3, h4, h5 {
+    /* font-family: Arial, sans-serif; */
+    font-weight: 700;
+}
+
 body {
-    background-color: #000000;
-    font-family: Arial, sans-serif;
-    color: #ffffff;
+    background-color: var(--background-50);
+    /* font-family: Arial, sans-serif; */
+    color: var(--text-950);
     /* margin: 0;
     padding: 0; */
+}
+
+html {
+    font-size: 100%;
+}
+
+/* 16px */
+
+h1 {
+    font-size: 3.053rem;
+    /* 48.8px */
+    color: var(--text-950)
+}
+
+h2 {
+    font-size: 2.442rem;
+    /* 39.04px */
+}
+
+h3 {
+    font-size: 1.954rem;
+    /* 31.2px */
+}
+
+h4 {
+    font-size: 1.563rem;
+    /* 24.96px */
+}
+
+h5 {
+    font-size: 1.250rem;
+    /* 20px */
+}
+
+small {
+    font-size: 0.800rem;
+    /* 12.8px */
 }
 header {
     display: flex;
 }
 table {
-    border-collapse: collapse;
+    /* border-collapse: collapse; */
     width: 100%;
 }
+tr {
+    height: 50px;
+    text-align: left;
+}
+tr:nth-child(1) {
+    background-color: var(--background-200);
+}
+tr:nth-child(2n) {
+    background-color: var(--background-100);
+}
+/* tr {
+    border: 2px solid var(--background-500);
+} */
 th, td {
     padding: 8px;
-    text-align: left;
-    height: 30px;
+    /* text-align: left;
+    height: 30px; */
+    border: 2px solid var(--background-50);
     border-radius: 5px;
 }
-th {
-    background-color: #000000;
-    border: 1px solid #222222;
-}
-td {
-    background-color: #222222;
-    border: 1px solid #000000;
+td:nth-last-child(1) {
+    text-align: right;
 }
 a {
-    color: #ffffff;
+    color: var(--primary-400);
+}
+a:hover {
+    color: var(--primary-500);
 }
 
 .popover {
@@ -35,8 +220,8 @@ a {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: #444444;
-    border: 1px solid #ffffff;
+    background-color: var(--background-100);
+    border: 1px solid var(--primary-200);
     border-radius: 5px;
     padding: 20px;
     display: flex;
@@ -45,14 +230,17 @@ a {
     align-items: center;
 }
 .popover button {
-    background-color: #000000;
-    color: #ffffff;
-    border: 1px solid #ffffff;
+    background-color: var(--primary-400);
+    color: var(--text-950);
+    border: 1px solid var(--primary-500);
+    font-size: 1.250rem;
     border-radius: 5px;
     padding: 5px;
     margin: 5px;
+    height: 50px;
     width: 33%;
+    cursor: pointer;
 }
 .popover button:hover {
-    background-color: darkviolet;
+    background-color: var(--primary-500);
 }
