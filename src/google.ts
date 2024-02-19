@@ -16,7 +16,7 @@ export function oauthSignIn() {
     // Parameters to pass to OAuth 2.0 endpoint.
     var params: { [key: string]: string } = {
         'client_id': '646423554576-uoddc2r0236fngusku0pr2vehci4tcuo.apps.googleusercontent.com',
-        'redirect_uri': 'https://improved-usefully-mackerel.ngrok-free.app',
+        'redirect_uri': document.location.origin,
         'response_type': 'token',
         'scope': scopes.join(' '),
         'include_granted_scopes': 'true',
@@ -37,21 +37,15 @@ export function oauthSignIn() {
     form.submit();
 }
 export function displayOauthSignIn(element: HTMLElement) {
-    const div = document.createElement('div')
-
-    const script = document.createElement('script')
-    script.innerHTML = `${oauthSignIn}`
-    div.appendChild(script)
-
     const popover = document.createElement('div')
     popover.setAttribute('class', 'popover')
     popover.innerHTML = `
     <h1>Authorize Google Analytics</h1>
-    <button onclick="oauthSignIn()">Authorize</button>
+    <italic>* This app is currently under development and is not affiliated with Google.</italic>
+    <button id=auth-button>Authorize</button>
     `
-    div.appendChild(popover);
-
-    element.appendChild(div)
+    element.appendChild(popover)
+    popover.querySelector('#auth-button')!.addEventListener('click', oauthSignIn);
 }
 
 export function saveCredentials() {
@@ -80,7 +74,7 @@ export async function getAccounts() {
     const queryParams = new URLSearchParams({
         'pageSize': '200',
     });
-    const url = `/api-ga4-admin/accounts?${queryParams.toString()}`;
+    const url = `/api/ga4-admin/accounts?${queryParams.toString()}`;
     const response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -111,7 +105,7 @@ export async function getProperties(accountName: string) {
         pageSize: '200',
     });
 
-    const url = `/api-ga4-admin/properties?${queryParams.toString()}`;
+    const url = `/api/ga4-admin/properties?${queryParams.toString()}`;
     const response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -137,7 +131,7 @@ export async function getData(propertyId: string, dimension: String, metric: Str
     const params = JSON.parse(credentials);
     const accessToken = params.access_token;
 
-    const url = `/api-ga4-data/properties/${propertyId}/:runReport`;
+    const url = `/api/ga4-data/properties/${propertyId}/:runReport`;
     const response = await fetch(url, {
         method: 'POST',
         headers: {

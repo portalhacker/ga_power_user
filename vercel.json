@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/ga4-admin/:path*",
+      "destination": "https://analyticsadmin.googleapis.com/v1beta/:path*"
+    },
+    {
+      "source": "/api/ga4-data/:path*",
+      "destination": "https://analyticsdata.googleapis.com/v1beta/:path*"
+    }
+  ]
+}

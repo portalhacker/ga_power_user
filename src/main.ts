@@ -56,9 +56,7 @@ function initEmptyTable() {
 
 app!.appendChild(initEmptyTable())
 
-if (window.location.hash!.includes('googleapis.com')) {
-  saveCredentials()
-}
+if (window.location.hash!.includes('googleapis.com')) saveCredentials();
 
 const googleCredentials = localStorage.getItem('google_credentials');
 if (!googleCredentials) displayOauthSignIn(app!);
