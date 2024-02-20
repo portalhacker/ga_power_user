@@ -2,6 +2,7 @@ import './style.css'
 
 import { displayOauthSignIn, saveCredentials, getAccounts, getProperties, getData } from './google'
 import { sortArrayByProperty } from './utilities'
+import { GA4AdminClient } from './apis/ga4/admin'
 
 // import gaAmdinIcon from '/icons/ga_admin.svg'
 
@@ -64,6 +65,7 @@ if (!googleCredentials) displayOauthSignIn(app!);
 declare global {
   interface Window {
     ga4: any;
+    ga4Client: any;
   }
 }
 
@@ -167,3 +169,16 @@ function displayProperties() {
   }
   app!.replaceChild(table, app!.querySelector('table')!)
 };
+
+
+async function fetchAccounts() {
+  const ga4AdminClient = new GA4AdminClient(JSON.parse(localStorage.getItem('google_credentials')!).access_token);
+  const accounts = await ga4AdminClient.listAccounts();
+  const promises = accounts.map(account => account.listProperties());
+  console.log('promises', promises);
+  await Promise.all(promises).then(() => {
+    window.ga4Client = ga4AdminClient;
+    console.log('ga4Client', ga4AdminClient);
+  });
+}
+fetchAccounts();
