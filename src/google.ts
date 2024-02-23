@@ -74,7 +74,7 @@ export async function getAccounts() {
     const queryParams = new URLSearchParams({
         'pageSize': '200',
     });
-    const url = `/api/ga4-admin/accounts?${queryParams.toString()}`;
+    const url = `/api/ga4-admin/v1beta/accounts?${queryParams.toString()}`;
     const response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -105,7 +105,7 @@ export async function getProperties(accountName: string) {
         pageSize: '200',
     });
 
-    const url = `/api/ga4-admin/properties?${queryParams.toString()}`;
+    const url = `/api/ga4-admin/v1beta/properties?${queryParams.toString()}`;
     const response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -131,7 +131,7 @@ export async function getData(propertyId: string, dimension: String, metric: Str
     const params = JSON.parse(credentials);
     const accessToken = params.access_token;
 
-    const url = `/api/ga4-data/properties/${propertyId}/:runReport`;
+    const url = `/api/ga4-data/v1beta/properties/${propertyId}/:runReport`;
     const response = await fetch(url, {
         method: 'POST',
         headers: {
