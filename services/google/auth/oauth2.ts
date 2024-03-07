@@ -1,11 +1,6 @@
-declare module 'http' {
-  interface Server {
-    destroy(): void;
-  }
-}
 import { Credentials, OAuth2Client } from 'google-auth-library';
 
-// Download your OAuth2 configuration from the Google
+
 import keys from './secrets/oauth2.keys.json';
 
 
@@ -33,9 +28,8 @@ export function getAuthenticatedClient(): string {
 }
 
 
-export async function saveCredentials(code: string): Promise<Credentials> {
+export async function getCredentials(code: string): Promise<Credentials> {
   const token = await oAuth2Client.getToken(code);
   oAuth2Client.setCredentials(token.tokens);
-  console.log('Credentials: ', oAuth2Client.credentials);
   return oAuth2Client.credentials;
 }
