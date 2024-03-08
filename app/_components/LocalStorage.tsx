@@ -7,12 +7,12 @@ export function SetLocalStorage({ storageKey, value }: { storageKey: string, val
   useEffect(() => {
     console.debug('Setting local storage', storageKey);
     localStorage.setItem(storageKey, value);
-    window.location.href = '/';
+    window.location.href = '/platforms/ga4';
   });
   return null;
 }
 
-export function GetLocalStorage({ storageKey }: { storageKey: string }) {
+export async function GetLocalStorage({ storageKey }: { storageKey: string }) {
   useEffect(() => {
     console.debug('Getting local storage', storageKey);
     const value = localStorage.getItem(storageKey);
