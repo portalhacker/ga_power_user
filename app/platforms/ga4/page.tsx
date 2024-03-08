@@ -1,4 +1,3 @@
-import { AnalyticsAdminServiceClient } from "@google-analytics/admin";
 import { cookies } from 'next/headers';
 
 
@@ -8,14 +7,6 @@ export default function Home() {
   const google_credentials = encondedGoogleCredentials ? JSON.parse(atob(encondedGoogleCredentials)) : null;
   console.log(google_credentials);
 
-  async function getAccounts() {
-    const client = new AnalyticsAdminServiceClient({
-      credentials: google_credentials,
-    });
-    const [accounts] = await client.listAccounts();
-    return accounts;
-  }
-  console.log(getAccounts());
 
   return (
     <main>
