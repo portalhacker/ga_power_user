@@ -1,44 +1,33 @@
-// 'use client';
+'use client';
 
-import { cookies } from 'next/headers';
+import { useState } from 'react';
 
-import { AnalyticsAdminServiceClient } from '@google-analytics/admin';
+const fetchAccountSummaries = async () => {
+  const res = await fetch('/api/google-analytics/admin/account-summaries');
+  return res.json();
+};
 
-import oAuth2Client from '@/src/services/google/auth/oauth2';
+export default function Page() {
+  const [accountSummaries, setAccountSummaries] = useState<
+    { name: string; displayName: string }[]
+  >([]);
 
-export default async function Page() {
-  const cookieStore = cookies();
-  const tokensCookie = cookieStore.get('tokens');
-
-  if (!tokensCookie) {
-    return <div>Not authenticated</div>;
+  if (!accountSummaries.length) {
+    fetchAccountSummaries().then(setAccountSummaries);
   }
-
-  const tokens = JSON.parse(tokensCookie.value);
-  oAuth2Client.setCredentials(tokens);
-
-  const adminClient = new AnalyticsAdminServiceClient({
-    auth: oAuth2Client as unknown as any,
-    fallback: 'rest',
-  });
-  const [accountSummaries] = await adminClient.listAccountSummaries();
-
-  // const accountPlaceholdersCount = 5;
-  // const accountPlaceholders = Array.from(
-  //   { length: accountPlaceholdersCount },
-  //   (_, i) => i
-  // );
 
   return (
     <div>
       <h1>Google Analytics Accounts</h1>
       <ul>
-        {/* {accountPlaceholders.map((i) => (
-          <li key={i}>Loading...</li>
-        ))} */}
-        {accountSummaries.map((accountSummary) => (
-          <li key={accountSummary.name}>{accountSummary.displayName}</li>
-        ))}
+        {accountSummaries.length === 0 && (
+          <li key="loading">Loading account summaries...</li>
+        )}
+
+        {accountSummaries.length > 0 &&
+          accountSummaries.map((accountSummary) => (
+            <li key={accountSummary.name}>{accountSummary.displayName}</li>
+          ))}
       </ul>
     </div>
   );
