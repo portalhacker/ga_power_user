@@ -4,7 +4,7 @@ import oAuth2Client from '@/src/services/google/auth/oauth2';
 import { AnalyticsAdminServiceClient } from '@google-analytics/admin';
 
 export async function GET(request: Request) {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const tokensCookie = cookieStore.get('tokens');
 
   if (!tokensCookie) {
