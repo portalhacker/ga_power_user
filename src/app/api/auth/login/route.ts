@@ -1,4 +1,4 @@
-import oAuth2Client from '@/src/services/google/auth/oauth2';
+import oAuth2Client from '@/src/lib/google/auth/oauth2';
 
 export async function GET(request: Request) {
   const authUrl = oAuth2Client.generateAuthUrl({
