@@ -1,31 +1,25 @@
-import oauth2Client from '@/services/google/auth/oauth2';
-import { NextResponse } from 'next/server';
+import oAuth2Client from '@/src/services/google/auth/oauth2';
 
 export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const code = searchParams.get('code');
-
+  const url = new URL(request.url);
+  const code = url.searchParams.get('code');
   if (!code) {
-    return NextResponse.json({ error: 'Missing code parameter' }, { status: 400 });
+    return new Response('No auth code provided.', { status: 400 });
   }
-
   try {
-    // Exchange the authorization code for tokens.
-    const { tokens } = await oauth2Client.getToken(code);
-    oauth2Client.setCredentials(tokens);
+    const { tokens } = await oAuth2Client.getToken(code as string);
 
-    // Here you might store tokens in cookies, session, or a database.
-    console.info('Tokens acquired:', tokens);
-    console.info('request.url:', request.url);
-
-    // Redirect to a success page with the tokens in cookies.
-    return NextResponse.redirect(new URL('/success', request.url), {
+    return new Response('Authentication successful!', {
+      status: 302,
       headers: {
-        'Set-Cookie': `tokens=${JSON.stringify(tokens)}; Path=/; Secure; SameSite=Strict`,
+        'Set-Cookie': `tokens=${JSON.stringify(
+          tokens
+        )}; Path=/; HttpOnly; Secure; SameSite=Strict`,
+        Location: '/accounts',
       },
     });
   } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: 'Failed to exchange code for tokens' }, { status: 500 });
+    console.error('Error retrieving tokens:', error);
+    return new Response('Authentication failed.', { status: 500 });
   }
 }

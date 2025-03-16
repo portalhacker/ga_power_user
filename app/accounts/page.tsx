@@ -1,41 +1,43 @@
-'use client';
+// 'use client';
 
-import { useEffect, useState } from "react";
+import { cookies } from 'next/headers';
 
-import { GA4AccountType, GA4AdminClient } from "@/services/google/analytics/admin";
+import { AnalyticsAdminServiceClient } from '@google-analytics/admin';
 
-export default function Page() {
-  const [accessToken, setAccessToken] = useState<string | null>(null);
-  const [accounts, setAccounts] = useState<GA4AccountType[]>([]);
+import oAuth2Client from '@/src/services/google/auth/oauth2';
 
-  useEffect(() => {
-    const tokens = document.cookie
-      .split('; ')
-      .find((row) => row.startsWith('tokens='))
-      ?.split('=')[1];
-    const accessToken
-      = tokens && JSON.parse(tokens).access_token ? JSON.parse(tokens).access_token : null;
-    if (accessToken) {
-      setAccessToken(accessToken);
-    }
-  }, []);
+export default async function Page() {
+  const cookieStore = cookies();
+  const tokensCookie = cookieStore.get('tokens');
 
-  useEffect(() => {
-    if (accessToken) {
-      const client = new GA4AdminClient(accessToken);
-      client.listAccounts().then((response) => {
-        setAccounts(response);
-      }
-    );
-    }
-  }, [accessToken]);
+  if (!tokensCookie) {
+    return <div>Not authenticated</div>;
+  }
+
+  const tokens = JSON.parse(tokensCookie.value);
+  oAuth2Client.setCredentials(tokens);
+
+  const adminClient = new AnalyticsAdminServiceClient({
+    auth: oAuth2Client as unknown as any,
+    fallback: 'rest',
+  });
+  const [accountSummaries] = await adminClient.listAccountSummaries();
+
+  // const accountPlaceholdersCount = 5;
+  // const accountPlaceholders = Array.from(
+  //   { length: accountPlaceholdersCount },
+  //   (_, i) => i
+  // );
 
   return (
     <div>
       <h1>Google Analytics Accounts</h1>
       <ul>
-        {accounts.map((account) => (
-          <li key={account.name.split('/')[1]}>{account.name.split('/')[1]} - {account.displayName}</li>
+        {/* {accountPlaceholders.map((i) => (
+          <li key={i}>Loading...</li>
+        ))} */}
+        {accountSummaries.map((accountSummary) => (
+          <li key={accountSummary.name}>{accountSummary.displayName}</li>
         ))}
       </ul>
     </div>
