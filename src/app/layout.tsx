@@ -22,19 +22,21 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <nav>
-            <Link href="/">Home</Link>
-            <ThemeToggle />
-            <UserAvatar />
-          </nav>
-          {children}
-        </ThemeProvider>
+        <div className="p-4">
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <nav>
+              <Link href="/">Home</Link>
+              <ThemeToggle />
+              <UserAvatar />
+            </nav>
+            {children}
+          </ThemeProvider>
+        </div>
       </body>
     </html>
   );
