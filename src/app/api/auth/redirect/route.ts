@@ -15,7 +15,7 @@ export async function GET(request: Request) {
         'Set-Cookie': `tokens=${JSON.stringify(
           tokens
         )}; Path=/; HttpOnly; Secure; SameSite=Strict`,
-        Location: '/accounts',
+        Location: '/account-summaries',
       },
     });
   } catch (error) {

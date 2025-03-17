@@ -9,7 +9,7 @@ export default function Home() {
       <nav className="flex flex-col gap-2">
         <ThemeToggle />
         <Link href="/api/auth/login">Log in</Link>
-        <Link href="/accounts">Accounts</Link>
+        <Link href="/account-summaries">Accounts</Link>
         <Button>Test</Button>
       </nav>
     </div>
