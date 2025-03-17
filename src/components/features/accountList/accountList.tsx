@@ -10,7 +10,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-
+import { Badge } from '@/components/ui/badge';
+import BadgeClipboard from '@/components/ui/badgeClipboard';
 import { auth } from '@/lib/auth/auth';
 import { prisma } from '@/src/lib/db/prisma';
 import oAuth2Client from '@/src/lib/google/auth/oauth2';
@@ -67,9 +68,11 @@ export default async function AccountList() {
               <div className="flex items-center justify-between w-full">
                 <div className="flex items-center gap-3">
                   <BarChart3 className="h-5 w-5 text-primary" />
-                  <div className="text-left">
+                  <div className="flex flex-row items-center gap-3">
+                    <BadgeClipboard>
+                      {accountSummary.account?.split('/')[1]}
+                    </BadgeClipboard>
                     <h3>{accountSummary.displayName}</h3>
-                    <p>{accountSummary.account?.split('/')[1]}</p>
                   </div>
                 </div>
               </div>
@@ -86,18 +89,27 @@ export default async function AccountList() {
                         <div className="flex items-start gap-3">
                           <Globe className="h-5 w-5 text-muted-foreground mt-0.5" />
                           <div>
-                            <Link
-                              href="#"
-                              className="font-medium hover:underline"
-                            >
-                              {propertySummary.displayName}
-                            </Link>
-                            <p className="text-xs text-muted-foreground">
-                              {propertySummary.property?.split('/')[1]}
-                            </p>
-                            <p className="text-xs text-muted-foreground">
-                              {propertySummary.propertyType}
-                            </p>
+                            <div className="flex flex-row items-center gap-3">
+                              <BadgeClipboard>
+                                {propertySummary.property?.split('/')[1]}
+                              </BadgeClipboard>
+                              <Link
+                                href={`https://analytics.google.com/analytics/web/#/p${
+                                  propertySummary.property?.split('/')[1]
+                                }`}
+                                className="font-medium hover:underline"
+                              >
+                                {propertySummary.displayName}
+                              </Link>
+                              {propertySummary.propertyType ===
+                                'PROPERTY_TYPE_ROLLUP' && (
+                                <Badge variant="secondary">Rollup</Badge>
+                              )}
+                              {propertySummary.propertyType ===
+                                'PROPERTY_TYPE_SUBPROPERTY' && (
+                                <Badge variant="secondary">Rollup</Badge>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </div>

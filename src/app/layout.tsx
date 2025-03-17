@@ -1,11 +1,12 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import Link from 'next/link';
 import './globals.css';
 
 import UserAvatar from '@/components/features/auth/user-avatar';
 import { ThemeProvider } from '@/components/features/darkMode/themeProvider';
 import { ThemeToggle } from '@/components/features/darkMode/themeToggle';
-import Link from 'next/link';
+import { Toaster } from '@/components/ui/sonner';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -22,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-        <div className="p-4">
+        <main className="p-4">
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -36,7 +37,8 @@ export default function RootLayout({
             </nav>
             {children}
           </ThemeProvider>
-        </div>
+        </main>
+        <Toaster />
       </body>
     </html>
   );
