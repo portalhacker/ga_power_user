@@ -46,11 +46,14 @@ export default async function AccountList() {
     return <p>No Google Analytics accounts found.</p>;
   } else if (accountSummaries.length > 0) {
     return (
-      <ul>
-        {accountSummaries.map((accountSummary) => (
-          <li key={accountSummary.name}>{accountSummary.displayName}</li>
-        ))}
-      </ul>
+      <>
+        <pre>{JSON.stringify(accountSummaries, null, 2)}</pre>
+        {/* // <ul>
+      //   {accountSummaries.map((accountSummary) => (
+      //     <li key={accountSummary.name}>{accountSummary.displayName}</li>
+      //   ))}
+      // </ul> */}
+      </>
     );
   } else {
     return <p>Unknown error.</p>;
