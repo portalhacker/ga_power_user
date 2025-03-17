@@ -17,7 +17,7 @@ import { prisma } from '@/src/lib/db/prisma';
 import oAuth2Client from '@/src/lib/google/auth/oauth2';
 import { AnalyticsAdminServiceClient } from '@google-analytics/admin';
 
-export default async function AccountList() {
+export default async function AccountSummaries() {
   const session = await auth();
 
   if (!session?.user) {
