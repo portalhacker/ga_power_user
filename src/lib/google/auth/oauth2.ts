@@ -1,10 +1,8 @@
 import { OAuth2Client } from 'google-auth-library';
-import keys from './secrets/oauth2.keys.json';
 
 const oAuth2Client = new OAuth2Client(
-  keys.web.client_id,
-  keys.web.client_secret,
-  keys.web.redirect_uris[0]
+  process.env.GOOGLE_CLIENT_ID,
+  process.env.GOOGLE_CLIENT_SECRET
 );
 
 export default oAuth2Client;
