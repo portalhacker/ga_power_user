@@ -1,6 +1,6 @@
+import { ThemeToggle } from '@/components/features/darkMode/themeToggle';
+import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { Button } from '../components/ui/button';
-import { ThemeToggle } from '../features/darkMode/themeToggle';
 
 export default function Home() {
   return (
