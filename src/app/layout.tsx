@@ -4,6 +4,8 @@ import './globals.css';
 
 import UserAvatar from '@/components/features/auth/user-avatar';
 import { ThemeProvider } from '@/components/features/darkMode/themeProvider';
+import { ThemeToggle } from '@/components/features/darkMode/themeToggle';
+import Link from 'next/link';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -27,6 +29,8 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <nav>
+            <Link href="/">Home</Link>
+            <ThemeToggle />
             <UserAvatar />
           </nav>
           {children}

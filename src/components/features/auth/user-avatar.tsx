@@ -1,21 +1,29 @@
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from '@/src/components/ui/avatar';
+
 import { auth } from '@/lib/auth/auth';
 
 export default async function UserAvatar() {
   const session = await auth();
-
   if (!session?.user) return null;
 
-  if (!session.user.image) {
-    return (
-      <div>
-        <span>{session.user.email}</span>
-      </div>
-    );
-  }
+  const initials = session.user.name
+    ?.trim()
+    .toUpperCase()
+    .split(' ')
+    .map((name) => name[0])
+    .join('');
 
   return (
-    <div>
-      <img src={session.user.image} alt="User Avatar" />
-    </div>
+    <Avatar>
+      <AvatarImage
+        src={session.user.image || undefined}
+        alt={session.user.name || undefined}
+      />
+      <AvatarFallback>{initials}</AvatarFallback>
+    </Avatar>
   );
 }

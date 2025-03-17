@@ -1,3 +1,4 @@
+import { unstable_cache } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 import { auth } from '@/lib/auth/auth';
@@ -32,7 +33,12 @@ export default async function AccountList() {
     auth: oAuth2Client as unknown as any,
     fallback: 'rest',
   });
-  const [accountSummaries] = await client.listAccountSummaries();
+
+  const getAccountSummaries = unstable_cache(async () => {
+    return await client.listAccountSummaries();
+  }, ['account-summaries']);
+
+  const [accountSummaries] = await getAccountSummaries();
 
   if (!accountSummaries) {
     return <p>Issue fetching...</p>;
