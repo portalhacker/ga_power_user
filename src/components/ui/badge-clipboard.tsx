@@ -1,19 +1,21 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
 import { Link } from 'lucide-react';
 
-import { toast } from 'sonner';
 import { Badge, BadgeProps } from './badge';
 
 function BadgeClipboard({ className, variant, ...props }: BadgeProps) {
+  const [copied, setCopied] = useState(false);
+
   const handleCopy = useCallback(() => {
     if (props.children) {
       navigator.clipboard
         .writeText(props.children.toString())
         .then(() => {
-          toast.success('Copied to clipboard ');
+          setCopied(true);
+          setTimeout(() => setCopied(false), 2000); // Re-enable after 2 seconds
         })
         .catch((err) => {
           console.error('Failed to copy text: ', err);
@@ -23,11 +25,13 @@ function BadgeClipboard({ className, variant, ...props }: BadgeProps) {
 
   return (
     <Badge
-      className={`${className} hover:scale-110`}
+      className={`${className} hover:scale-110 ${
+        copied ? 'bg-muted-foreground' : ''
+      }`}
       variant={variant}
-      onClick={handleCopy}
+      onClick={!copied ? handleCopy : undefined} // Disable click when copied
       style={{
-        cursor: 'pointer',
+        cursor: copied ? 'not-allowed' : 'pointer',
         display: 'flex',
         alignItems: 'center',
         gap: '0.5rem',
@@ -35,7 +39,7 @@ function BadgeClipboard({ className, variant, ...props }: BadgeProps) {
       {...props}
     >
       <Link size={16} />
-      {props.children}
+      {copied ? 'Copied!' : props.children}
     </Badge>
   );
 }
