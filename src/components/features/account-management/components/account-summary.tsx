@@ -28,6 +28,7 @@ export default function AccountSummary({
                 </BadgeClipboard>
               </div>
               <h3 className="text-xl">{accountSummary.displayName}</h3>
+              <p>{accountSummary.propertySummaries.length} properties</p>
             </div>
           </div>
         </div>
