@@ -44,7 +44,7 @@ export default function PropertySummary({
   return (
     <div className="px-4 py-3 hover:bg-muted/50 transition-colors">
       <div className="flex items-start justify-between">
-        <div className="flex items-start gap-3">
+        <div className="flex items-center gap-3">
           <Globe className="h-5 w-5 text-muted-foreground mt-0.5" />
           <div className="flex flex-col gap-1 md:flex-row md:items-center md:gap-3">
             <div className="w-fit">
@@ -52,38 +52,42 @@ export default function PropertySummary({
                 {propertySummary.property?.split('/')[1]}
               </BadgeClipboard>
             </div>
-            <Link href="#" className="text-l hover:underline">
-              {propertySummary.displayName}
-            </Link>
-            <ContextMenu>
-              <ContextMenuTrigger>
-                <Link
-                  href={`https://analytics.google.com/analytics/web/#/p${propertyId}`}
-                  target="_blank"
-                >
-                  <ExternalLink size={16} className="hover:scale-110" />
-                </Link>
-              </ContextMenuTrigger>
-              <ContextMenuContent>
-                {links.map((link, index) => (
+            <div className="flex flex-row gap-3">
+              <Link href="#" className="text-l hover:underline">
+                {propertySummary.displayName}
+              </Link>
+              <ContextMenu>
+                <ContextMenuTrigger>
                   <Link
-                    href={link.href}
-                    className="hover:underline"
+                    href={`https://analytics.google.com/analytics/web/#/p${propertyId}`}
                     target="_blank"
-                    key={index}
                   >
-                    <ContextMenuItem key={index}>{link.label}</ContextMenuItem>
+                    <ExternalLink size={16} className="hover:scale-110" />
                   </Link>
-                ))}
-              </ContextMenuContent>
-            </ContextMenu>
+                </ContextMenuTrigger>
+                <ContextMenuContent>
+                  {links.map((link, index) => (
+                    <Link
+                      href={link.href}
+                      className="hover:underline"
+                      target="_blank"
+                      key={index}
+                    >
+                      <ContextMenuItem key={index}>
+                        {link.label}
+                      </ContextMenuItem>
+                    </Link>
+                  ))}
+                </ContextMenuContent>
+              </ContextMenu>
 
-            {propertySummary.propertyType === 'PROPERTY_TYPE_ROLLUP' && (
-              <Badge variant="secondary">Rollup</Badge>
-            )}
-            {propertySummary.propertyType === 'PROPERTY_TYPE_SUBPROPERTY' && (
-              <Badge variant="secondary">Subproperty</Badge>
-            )}
+              {propertySummary.propertyType === 'PROPERTY_TYPE_ROLLUP' && (
+                <Badge variant="secondary">Rollup</Badge>
+              )}
+              {propertySummary.propertyType === 'PROPERTY_TYPE_SUBPROPERTY' && (
+                <Badge variant="secondary">Subproperty</Badge>
+              )}
+            </div>
           </div>
         </div>
       </div>
