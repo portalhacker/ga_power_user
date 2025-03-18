@@ -1,11 +1,10 @@
 import { unstable_cache } from 'next/cache';
 import { redirect } from 'next/navigation';
 
-import { Accordion } from '@/components/ui/accordion';
 import { auth, signIn } from '@/lib/auth/auth';
 import { prisma } from '@/src/lib/db/prisma';
 import useGoogleAnalyticsClient from '../hooks/useGoogleAnalyticsClient';
-import AccountSummary from './account-summary';
+import AccountSummariesClient from './account-summaries.client';
 
 export default async function AccountSummaries() {
   const session = await auth();
@@ -44,7 +43,6 @@ export default async function AccountSummaries() {
   const getAccountSummaries = unstable_cache(async () => {
     return await client.listAccountSummaries();
   }, ['account-summaries']);
-
   const [accountSummaries] = await getAccountSummaries();
 
   if (!accountSummaries) {
@@ -52,23 +50,14 @@ export default async function AccountSummaries() {
   } else if (accountSummaries.length === 0) {
     return <p>No Google Analytics accounts found.</p>;
   } else if (accountSummaries.length > 0) {
+    const allKeys = accountSummaries.map(
+      (accountSummary) => accountSummary.account?.split('/')[1]
+    ) as string[];
     return (
-      <Accordion
-        type="multiple"
-        defaultValue={
-          accountSummaries.map(
-            (accountSummary) => accountSummary.account?.split('/')[1]
-          ) as string[]
-        }
-        className="space-y-4"
-      >
-        {accountSummaries.map((accountSummary) => (
-          <AccountSummary
-            key={accountSummary.account?.split('/')[1]}
-            accountSummary={accountSummary}
-          />
-        ))}
-      </Accordion>
+      <AccountSummariesClient
+        accountSummaries={accountSummaries}
+        allKeys={allKeys}
+      />
     );
   } else {
     return <p>Unknown error.</p>;
