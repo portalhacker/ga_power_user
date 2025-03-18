@@ -53,7 +53,15 @@ export default async function AccountSummaries() {
     return <p>No Google Analytics accounts found.</p>;
   } else if (accountSummaries.length > 0) {
     return (
-      <Accordion type="multiple" className="space-y-4">
+      <Accordion
+        type="multiple"
+        defaultValue={
+          accountSummaries.map(
+            (accountSummary) => accountSummary.account?.split('/')[1]
+          ) as string[]
+        }
+        className="space-y-4"
+      >
         {accountSummaries.map((accountSummary) => (
           <AccountSummary
             key={accountSummary.account?.split('/')[1]}
