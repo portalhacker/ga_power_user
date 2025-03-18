@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 
 import { auth, signIn } from '@/lib/auth/auth';
 import { prisma } from '@/src/lib/db/prisma';
+import { sortArrayByProperty } from '@/src/lib/utils';
 import useGoogleAnalyticsClient from '../hooks/useGoogleAnalyticsClient';
 import AccountSummariesClient from './account-summaries.client';
 
@@ -50,12 +51,16 @@ export default async function AccountSummaries() {
   } else if (accountSummaries.length === 0) {
     return <p>No Google Analytics accounts found.</p>;
   } else if (accountSummaries.length > 0) {
-    const allKeys = accountSummaries.map(
+    const sortedAccountSummaries = sortArrayByProperty(
+      accountSummaries,
+      'displayName'
+    );
+    const allKeys = sortedAccountSummaries.map(
       (accountSummary) => accountSummary.account?.split('/')[1]
     ) as string[];
     return (
       <AccountSummariesClient
-        accountSummaries={accountSummaries}
+        accountSummaries={sortedAccountSummaries}
         allKeys={allKeys}
       />
     );

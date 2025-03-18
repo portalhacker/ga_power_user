@@ -1,3 +1,4 @@
+import { sortArrayByProperty } from '@/src/lib/utils';
 import PropertySummary from './property-summary';
 
 export default function PropertySummaries({
@@ -5,9 +6,13 @@ export default function PropertySummaries({
 }: {
   propertySummaries: any[];
 }) {
+  const sortedPropertySummaries = sortArrayByProperty(
+    propertySummaries,
+    'displayName'
+  );
   return (
     <ul>
-      {(propertySummaries ?? []).map((propertySummary) => (
+      {(sortedPropertySummaries ?? []).map((propertySummary) => (
         <PropertySummary
           key={propertySummary.property?.split('/')[1]}
           propertySummary={propertySummary}
