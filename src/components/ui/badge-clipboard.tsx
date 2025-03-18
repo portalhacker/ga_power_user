@@ -23,7 +23,7 @@ function BadgeClipboard({ className, variant, ...props }: BadgeProps) {
 
   return (
     <Badge
-      className={className}
+      className={`${className} hover:scale-110`}
       variant={variant}
       onClick={handleCopy}
       style={{

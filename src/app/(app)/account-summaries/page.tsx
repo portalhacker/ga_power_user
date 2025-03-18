@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 
-import AccountSummaries from '@/src/components/features/account-management/account-summaries';
+import AccountSummaries from '@/src/components/features/account-management/components/account-summaries';
 
 export default async function Page() {
   return (
