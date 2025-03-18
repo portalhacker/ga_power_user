@@ -9,9 +9,30 @@ import PropertySummaries from './property-summaries';
 
 export default function AccountSummary({
   accountSummary,
+  searchQuery,
 }: {
   accountSummary: any;
+  searchQuery: string;
 }) {
+  const filteredPropertySummaries = accountSummary.propertySummaries.filter(
+    (propertySummary: any) => {
+      try {
+        const regex = new RegExp(searchQuery, 'i'); // Case-insensitive regex
+        return (
+          regex.test(propertySummary.displayName) || // Match property display name
+          regex.test(propertySummary.property) // Match property name
+        );
+      } catch (e) {
+        // If the regex is invalid, fallback to a simple includes check
+        const lowerQuery = searchQuery.toLowerCase();
+        return (
+          propertySummary.displayName?.toLowerCase().includes(lowerQuery) ||
+          propertySummary.property?.toLowerCase().includes(lowerQuery)
+        );
+      }
+    }
+  );
+
   return (
     <AccordionItem
       value={accountSummary.account?.split('/')[1] || ''}
@@ -28,15 +49,13 @@ export default function AccountSummary({
                 </BadgeClipboard>
               </div>
               <h3 className="text-xl">{accountSummary.displayName}</h3>
-              <p>{accountSummary.propertySummaries.length} properties</p>
+              <p>{filteredPropertySummaries.length} properties</p>
             </div>
           </div>
         </div>
       </AccordionTrigger>
       <AccordionContent className="pl-4">
-        <PropertySummaries
-          propertySummaries={accountSummary.propertySummaries}
-        />
+        <PropertySummaries propertySummaries={filteredPropertySummaries} />
       </AccordionContent>
     </AccordionItem>
   );
