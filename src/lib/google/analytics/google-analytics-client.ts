@@ -17,7 +17,6 @@ export class GoogleAnalyticsClient {
       const [accountSummaries] = await this.client.listAccountSummaries();
       return accountSummaries || [];
     } catch (error) {
-      console.error('Error fetching account summaries:', error);
       throw new Error('Failed to fetch account summaries');
     }
   }

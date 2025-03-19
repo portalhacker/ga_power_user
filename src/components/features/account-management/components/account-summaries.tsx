@@ -1,7 +1,7 @@
 import { unstable_cache } from 'next/cache';
-import { redirect } from 'next/navigation';
 
-import { auth, signIn } from '@/lib/auth/auth';
+import SignIn from '@/components/features/auth/sign-in';
+import { auth } from '@/lib/auth/auth';
 import { GoogleAnalyticsClient } from '@/lib/google/analytics/google-analytics-client';
 import { prisma } from '@/src/lib/db/prisma';
 import { sortArrayByProperty } from '@/src/lib/utils';
@@ -9,15 +9,22 @@ import AccountSummariesClient from './account-summaries.client';
 
 export const dynamic = 'force-dynamic';
 
-export default async function AccountSummaries() {
+export default async function AccountSummaries({
+  searchQuery,
+}: {
+  searchQuery: string | undefined;
+}) {
   const session = await auth();
-  if (session?.error === 'RefreshTokenError') {
-    await signIn('google'); // Force sign in to obtain a new set of access and refresh tokens
+  if (
+    !session ||
+    session === null ||
+    !session.user ||
+    session?.error === 'RefreshTokenError'
+  ) {
+    return <SignIn />;
   }
 
-  if (!session?.user) {
-    redirect('/');
-  }
+  console.log('searchQuery account-summaries.tsx', searchQuery);
 
   const tokens = await prisma.account.findFirst({
     where: {
@@ -57,14 +64,76 @@ export default async function AccountSummaries() {
     accountSummaries,
     'displayName'
   );
+
+  // Filter account summaries based on search query
+  const filteredAccountSummaries = searchQuery
+    ? sortedAccountSummaries
+        .map((accountSummary) => {
+          try {
+            const regex = new RegExp(searchQuery || '', 'i'); // Case-insensitive regex
+
+            // Check if the account itself matches
+            const accountMatches =
+              regex.test(accountSummary.displayName) ||
+              regex.test(accountSummary.account);
+
+            // Filter property summaries that match the search query
+            const filteredPropertySummaries =
+              accountSummary.propertySummaries?.filter(
+                (propertySummary: any) =>
+                  regex.test(propertySummary.displayName) ||
+                  regex.test(propertySummary.property)
+              ) || [];
+
+            // Return the account with only matching properties
+            // Or return null if neither the account nor any properties match
+            return accountMatches || filteredPropertySummaries.length > 0
+              ? {
+                  ...accountSummary,
+                  propertySummaries: filteredPropertySummaries,
+                }
+              : null;
+          } catch (e) {
+            // If the regex is invalid, fallback to a simple includes check
+            const lowerQuery = searchQuery?.toLowerCase();
+
+            // Check if the account itself matches
+            const accountMatches =
+              accountSummary.displayName?.toLowerCase().includes(lowerQuery) ||
+              accountSummary.account?.toLowerCase().includes(lowerQuery);
+
+            // Filter property summaries that match the search query
+            const filteredPropertySummaries =
+              accountSummary.propertySummaries?.filter(
+                (propertySummary: any) =>
+                  propertySummary.displayName
+                    ?.toLowerCase()
+                    .includes(lowerQuery) ||
+                  propertySummary.property?.toLowerCase().includes(lowerQuery)
+              ) || [];
+
+            // Return the account with only matching properties
+            // Or return null if neither the account nor any properties match
+            return accountMatches || filteredPropertySummaries.length > 0
+              ? {
+                  ...accountSummary,
+                  propertySummaries: filteredPropertySummaries,
+                }
+              : null;
+          }
+        })
+        .filter(Boolean) // Remove null values
+    : sortedAccountSummaries;
+
   const allKeys = sortedAccountSummaries.map(
     (accountSummary) => accountSummary.account?.split('/')[1]
   ) as string[];
 
   return (
     <AccountSummariesClient
-      accountSummaries={sortedAccountSummaries}
+      accountSummaries={filteredAccountSummaries}
       allKeys={allKeys}
+      searchQuery={searchQuery}
     />
   );
 }

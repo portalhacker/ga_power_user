@@ -11,7 +11,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         params: {
           access_type: 'offline',
           response_type: 'code',
-          // prompt: 'consent',
+          prompt: 'consent',
           scope:
             'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/analytics.readonly',
         },
@@ -27,6 +27,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         googleAccount.expires_at &&
         googleAccount.expires_at * 1000 < Date.now()
       ) {
+        console.log('googleAccount', googleAccount);
         // If the access token has expired, try to refresh it
         try {
           // https://accounts.google.com/.well-known/openid-configuration
@@ -37,9 +38,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
               client_id: process.env.AUTH_GOOGLE_ID!,
               client_secret: process.env.AUTH_GOOGLE_SECRET!,
               grant_type: 'refresh_token',
-              ...(googleAccount.refresh_token
-                ? { refresh_token: googleAccount.refresh_token }
-                : {}),
+              refresh_token: googleAccount.refresh_token!,
             }),
           });
 
@@ -50,15 +49,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           const newTokens = tokensOrError as {
             access_token: string;
             expires_in: number;
-            refresh_token?: string;
+            scope?: string;
+            token_type: string;
           };
 
           await prisma.account.update({
             data: {
               access_token: newTokens.access_token,
               expires_at: Math.floor(Date.now() / 1000 + newTokens.expires_in),
-              refresh_token:
-                newTokens.refresh_token ?? googleAccount.refresh_token,
             },
             where: {
               provider_providerAccountId: {

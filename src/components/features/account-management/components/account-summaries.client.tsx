@@ -3,53 +3,51 @@
 import { Accordion } from '@/components/ui/accordion';
 import { Switch } from '@/components/ui/switch';
 import { Input } from '@/src/components/ui/input';
-import { useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import AccountSummary from './account-summary';
 
 interface AccountSummariesClientProps {
   accountSummaries: Array<any>; // Replace `any` with the actual type of account summaries
   allKeys: string[];
+  searchQuery: string | undefined;
 }
 
 export default function AccountSummariesClient({
   accountSummaries,
   allKeys,
+  searchQuery,
 }: AccountSummariesClientProps) {
+  const router = useRouter();
+  const pathname = usePathname();
   const [openAll, setOpenAll] = useState(true);
   const [openKeys, setOpenKeys] = useState<string[]>(allKeys);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [inputValue, setInputValue] = useState(searchQuery || '');
+
+  console.log('inputValue account-summaries.client.tsx', inputValue);
+  // Update input value when searchQuery prop changes
+  useEffect(() => {
+    setInputValue(inputValue);
+  }, [searchQuery]);
 
   const handleToggle = (checked: boolean) => {
     setOpenAll(checked);
     setOpenKeys(checked ? allKeys : []);
   };
 
-  const filteredAccountSummaries = accountSummaries.filter((accountSummary) => {
-    try {
-      const regex = new RegExp(searchQuery, 'i'); // Case-insensitive regex
-      return (
-        regex.test(accountSummary.displayName) || // Match account display name
-        regex.test(accountSummary.account) || // Match account name
-        accountSummary.propertySummaries?.some(
-          (propertySummary: any) =>
-            regex.test(propertySummary.displayName) || // Match property display name
-            regex.test(propertySummary.property) // Match property name
-        )
-      );
-    } catch (e) {
-      // If the regex is invalid, fallback to a simple includes check
-      const lowerQuery = searchQuery.toLowerCase();
-      return (
-        accountSummary.displayName?.toLowerCase().includes(lowerQuery) ||
-        accountSummary.account?.toLowerCase().includes(lowerQuery) ||
-        accountSummary.propertySummaries?.some(
-          (propertySummary: any) =>
-            propertySummary.displayName?.toLowerCase().includes(lowerQuery) ||
-            propertySummary.property?.toLowerCase().includes(lowerQuery)
-        )
-      );
-    }
-  });
+  const handleSearch = (value: string) => {
+    setInputValue(value);
+    // Debounce the URL update to avoid too many history entries
+    const timeoutId = setTimeout(() => {
+      const params = new URLSearchParams();
+      if (value) {
+        params.set('q', value);
+      }
+      const newUrl = `${pathname}${value ? `?${params.toString()}` : ''}`;
+      router.push(newUrl);
+    }, 1);
+    return () => clearTimeout(timeoutId);
+  };
 
   return (
     <div>
@@ -68,8 +66,8 @@ export default function AccountSummariesClient({
         <Input
           type="text"
           placeholder="Search accounts..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          value={inputValue}
+          onChange={(e) => handleSearch(e.target.value)}
           className="w-full"
         />
       </div>
@@ -80,11 +78,10 @@ export default function AccountSummariesClient({
         onValueChange={(keys) => setOpenKeys(keys)}
         className="space-y-4"
       >
-        {filteredAccountSummaries.map((accountSummary) => (
+        {accountSummaries.map((accountSummary) => (
           <AccountSummary
             key={accountSummary.account?.split('/')[1]}
             accountSummary={accountSummary}
-            searchQuery={searchQuery}
           />
         ))}
       </Accordion>
