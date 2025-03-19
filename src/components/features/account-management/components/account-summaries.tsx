@@ -24,8 +24,6 @@ export default async function AccountSummaries({
     return <SignIn />;
   }
 
-  console.log('searchQuery account-summaries.tsx', searchQuery);
-
   const tokens = await prisma.account.findFirst({
     where: {
       userId: session.user.id,

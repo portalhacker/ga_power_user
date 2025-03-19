@@ -24,11 +24,10 @@ export default function AccountSummariesClient({
   const [openKeys, setOpenKeys] = useState<string[]>(allKeys);
   const [inputValue, setInputValue] = useState(searchQuery || '');
 
-  console.log('inputValue account-summaries.client.tsx', inputValue);
   // Update input value when searchQuery prop changes
   useEffect(() => {
     setInputValue(inputValue);
-  }, [searchQuery]);
+  }, [inputValue]);
 
   const handleToggle = (checked: boolean) => {
     setOpenAll(checked);
@@ -51,17 +50,6 @@ export default function AccountSummariesClient({
 
   return (
     <div>
-      <div className="flex items-center mb-4">
-        <Switch
-          checked={openAll}
-          onCheckedChange={handleToggle}
-          id="toggle-accordion"
-        />
-        <label htmlFor="toggle-accordion" className="ml-2">
-          {openAll ? 'Close All' : 'Open All'}
-        </label>
-      </div>
-
       <div className="mb-4">
         <Input
           type="text"
@@ -70,6 +58,17 @@ export default function AccountSummariesClient({
           onChange={(e) => handleSearch(e.target.value)}
           className="w-full"
         />
+      </div>
+
+      <div className="flex items-center justify-end mb-4">
+        <Switch
+          checked={openAll}
+          onCheckedChange={handleToggle}
+          id="toggle-accordion"
+        />
+        <label htmlFor="toggle-accordion" className="ml-2">
+          {openAll ? 'Close All' : 'Open All'}
+        </label>
       </div>
 
       <Accordion

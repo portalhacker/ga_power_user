@@ -9,10 +9,6 @@ export default async function Home() {
   return (
     <div>
       <h1>Home</h1>
-      <nav className="flex flex-col gap-2">
-        {session?.user ? <SignOut /> : <SignIn />}
-        <Link href="/account-summaries">Accounts</Link>
-      </nav>
     </div>
   );
 }

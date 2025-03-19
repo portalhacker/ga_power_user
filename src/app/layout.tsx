@@ -8,6 +8,10 @@ import { ThemeProvider } from '@/components/features/darkMode/themeProvider';
 import { ThemeToggle } from '@/components/features/darkMode/themeToggle';
 import { Toaster } from '@/components/ui/sonner';
 
+import SignIn from '@/components/features/auth/sign-in';
+import SignOut from '@/components/features/auth/sign-out';
+import { auth } from '@/lib/auth/auth';
+
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
@@ -15,11 +19,12 @@ export const metadata: Metadata = {
   description: 'Supercharge your Google Analytics workflows',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth();
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
@@ -30,10 +35,16 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <nav>
-              <Link href="/">Home</Link>
-              <ThemeToggle />
-              <UserAvatar />
+            <nav className="flex justify-between mb-4">
+              <div className="flex gap-2">
+                <Link href="/">Home</Link>
+                <Link href="/account-summaries">Accounts</Link>
+              </div>
+              <div className="flex gap-2">
+                <ThemeToggle />
+                <UserAvatar />
+                {session?.user ? <SignOut /> : <SignIn />}
+              </div>
             </nav>
             {children}
           </ThemeProvider>

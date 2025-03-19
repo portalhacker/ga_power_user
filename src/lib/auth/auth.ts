@@ -27,7 +27,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         googleAccount.expires_at &&
         googleAccount.expires_at * 1000 < Date.now()
       ) {
-        console.log('googleAccount', googleAccount);
         // If the access token has expired, try to refresh it
         try {
           // https://accounts.google.com/.well-known/openid-configuration
