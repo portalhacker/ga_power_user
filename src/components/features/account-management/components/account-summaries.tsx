@@ -48,7 +48,7 @@ export default async function AccountSummaries({
   // Fetch account summaries using `unstable_cache`
   const accountSummaries = await unstable_cache(async () => {
     return await client.listAccountSummaries();
-  }, ['account-summaries'])();
+  }, [session.user.id || '', 'account-summaries'])();
 
   if (!accountSummaries) {
     return <p>Issue fetching account summaries.</p>;
