@@ -43,7 +43,6 @@ export default async function RootLayout({
               <div className="flex gap-2">
                 <ThemeToggle />
                 <UserAvatar />
-                {session?.user ? <SignOut /> : <SignIn />}
               </div>
             </nav>
             {children}
