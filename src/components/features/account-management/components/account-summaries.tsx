@@ -1,5 +1,3 @@
-import { unstable_cache } from 'next/cache';
-
 import SignIn from '@/components/features/auth/sign-in';
 import { auth } from '@/lib/auth/auth';
 import { GoogleAnalyticsClient } from '@/lib/google/analytics/google-analytics-client';
@@ -45,10 +43,7 @@ export default async function AccountSummaries({
     access_token: tokens.access_token,
   });
 
-  // Fetch account summaries using `unstable_cache`
-  const accountSummaries = await unstable_cache(async () => {
-    return await client.listAccountSummaries();
-  }, [session.user.id || '', 'account-summaries'])();
+  const accountSummaries = await client.listAccountSummaries();
 
   if (!accountSummaries) {
     return <p>Issue fetching account summaries.</p>;
