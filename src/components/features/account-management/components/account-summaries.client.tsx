@@ -67,7 +67,7 @@ export default function AccountSummariesClient({
           id="toggle-accordion"
         />
         <label htmlFor="toggle-accordion" className="ml-2">
-          {openAll ? 'Close All' : 'Open All'}
+          Open All
         </label>
       </div>
 
