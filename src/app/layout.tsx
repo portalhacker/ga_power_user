@@ -8,8 +8,6 @@ import { ThemeProvider } from '@/components/features/darkMode/themeProvider';
 import { ThemeToggle } from '@/components/features/darkMode/themeToggle';
 import { Toaster } from '@/components/ui/sonner';
 
-import SignIn from '@/components/features/auth/sign-in';
-import SignOut from '@/components/features/auth/sign-out';
 import { auth } from '@/lib/auth/auth';
 
 const inter = Inter({ subsets: ['latin'] });
