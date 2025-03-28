@@ -9,6 +9,12 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
 } from '@/components/ui/context-menu';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import BadgeClipboard from '@/src/components/ui/badge-clipboard';
 
 export default function PropertySummary({
@@ -58,12 +64,25 @@ export default function PropertySummary({
               </Link>
               <ContextMenu>
                 <ContextMenuTrigger>
-                  <Link
-                    href={`https://analytics.google.com/analytics/web/#/p${propertyId}`}
-                    target="_blank"
-                  >
-                    <ExternalLink size={16} className="hover:scale-110" />
-                  </Link>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Link
+                          href={`https://analytics.google.com/analytics/web/#/p${propertyId}`}
+                          target="_blank"
+                        >
+                          <ExternalLink size={16} className="hover:scale-110" />
+                        </Link>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>
+                          <strong>Navigate to GA4</strong>
+                          <br />
+                          Right-click for more links
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 </ContextMenuTrigger>
                 <ContextMenuContent>
                   {links.map((link, index) => (
