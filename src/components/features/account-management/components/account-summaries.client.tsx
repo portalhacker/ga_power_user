@@ -141,25 +141,27 @@ export default function AccountSummariesClient({
 
   return (
     <div>
-      <div className="mb-4">
-        <Input
-          type="text"
-          placeholder="Search accounts..."
-          value={inputValue}
-          onChange={(e) => handleSearch(e.target.value)}
-          className="w-full"
-        />
-      </div>
+      <div className="mb-4 flex justify-end gap-4">
+        <div className="flex-gow">
+          <Input
+            type="text"
+            placeholder="Search accounts..."
+            value={inputValue}
+            onChange={(e) => handleSearch(e.target.value)}
+            className="w-full"
+          />
+        </div>
 
-      <div className="flex items-center justify-end mb-4">
-        <Switch
-          checked={openAll}
-          onCheckedChange={handleToggle}
-          id="toggle-accordion"
-        />
-        <label htmlFor="toggle-accordion" className="ml-2">
-          Open All
-        </label>
+        <div className="flex items-center">
+          <Switch
+            checked={openAll}
+            onCheckedChange={handleToggle}
+            id="toggle-accordion"
+          />
+          <label htmlFor="toggle-accordion" className="ml-2">
+            Open All
+          </label>
+        </div>
       </div>
 
       <Accordion
