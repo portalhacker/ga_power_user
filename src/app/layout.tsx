@@ -27,12 +27,12 @@ export default async function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <nav className="flex justify-between mb-4">
+            <nav className="flex justify-between mb-4 items-center">
               <div className="flex gap-2">
                 <Link href="/">Home</Link>
                 <Link href="/account-summaries">Accounts</Link>
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-2 items-center">
                 <ThemeToggle />
                 <UserAvatar />
               </div>
