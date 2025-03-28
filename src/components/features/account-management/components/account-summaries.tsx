@@ -58,73 +58,14 @@ export default async function AccountSummaries({
     'displayName'
   );
 
-  // Filter account summaries based on search query
-  const filteredAccountSummaries = searchQuery
-    ? sortedAccountSummaries
-        .map((accountSummary) => {
-          try {
-            const regex = new RegExp(searchQuery || '', 'i'); // Case-insensitive regex
-
-            // Check if the account itself matches
-            const accountMatches =
-              regex.test(accountSummary.displayName) ||
-              regex.test(accountSummary.account);
-
-            // Filter property summaries that match the search query
-            const filteredPropertySummaries =
-              accountSummary.propertySummaries?.filter(
-                (propertySummary: any) =>
-                  regex.test(propertySummary.displayName) ||
-                  regex.test(propertySummary.property)
-              ) || [];
-
-            // Return the account with only matching properties
-            // Or return null if neither the account nor any properties match
-            return accountMatches || filteredPropertySummaries.length > 0
-              ? {
-                  ...accountSummary,
-                  propertySummaries: filteredPropertySummaries,
-                }
-              : null;
-          } catch (e) {
-            // If the regex is invalid, fallback to a simple includes check
-            const lowerQuery = searchQuery?.toLowerCase();
-
-            // Check if the account itself matches
-            const accountMatches =
-              accountSummary.displayName?.toLowerCase().includes(lowerQuery) ||
-              accountSummary.account?.toLowerCase().includes(lowerQuery);
-
-            // Filter property summaries that match the search query
-            const filteredPropertySummaries =
-              accountSummary.propertySummaries?.filter(
-                (propertySummary: any) =>
-                  propertySummary.displayName
-                    ?.toLowerCase()
-                    .includes(lowerQuery) ||
-                  propertySummary.property?.toLowerCase().includes(lowerQuery)
-              ) || [];
-
-            // Return the account with only matching properties
-            // Or return null if neither the account nor any properties match
-            return accountMatches || filteredPropertySummaries.length > 0
-              ? {
-                  ...accountSummary,
-                  propertySummaries: filteredPropertySummaries,
-                }
-              : null;
-          }
-        })
-        .filter(Boolean) // Remove null values
-    : sortedAccountSummaries;
-
+  // No longer filtering server-side - moved to client-side
   const allKeys = sortedAccountSummaries.map(
     (accountSummary) => accountSummary.account?.split('/')[1]
   ) as string[];
 
   return (
     <AccountSummariesClient
-      accountSummaries={filteredAccountSummaries}
+      accountSummaries={sortedAccountSummaries}
       allKeys={allKeys}
       searchQuery={searchQuery}
     />

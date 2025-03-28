@@ -3,8 +3,8 @@
 import { Accordion } from '@/components/ui/accordion';
 import { Switch } from '@/components/ui/switch';
 import { Input } from '@/src/components/ui/input';
-import { usePathname, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import AccountSummary from './account-summary';
 
 interface AccountSummariesClientProps {
@@ -20,14 +20,16 @@ export default function AccountSummariesClient({
 }: AccountSummariesClientProps) {
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [openAll, setOpenAll] = useState(true);
   const [openKeys, setOpenKeys] = useState<string[]>(allKeys);
   const [inputValue, setInputValue] = useState(searchQuery || '');
+  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Update input value when searchQuery prop changes
+  // Update input value when searchQuery prop changes (only on initial load)
   useEffect(() => {
-    setInputValue(inputValue);
-  }, [inputValue]);
+    setInputValue(searchQuery || '');
+  }, []); // Empty dependency array means this only runs once on mount
 
   const handleToggle = (checked: boolean) => {
     setOpenAll(checked);
@@ -35,18 +37,97 @@ export default function AccountSummariesClient({
   };
 
   const handleSearch = (value: string) => {
+    // Update the input value immediately for client-side filtering
     setInputValue(value);
-    // Debounce the URL update to avoid too many history entries
-    const timeoutId = setTimeout(() => {
-      const params = new URLSearchParams();
+
+    // Clear any existing timer
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
+
+    // Debounce the URL update to avoid too many history entries and server requests
+    debounceTimerRef.current = setTimeout(() => {
+      // Create a new URLSearchParams object
+      const params = new URLSearchParams(searchParams.toString());
+
+      // Update or remove the 'q' parameter
       if (value) {
         params.set('q', value);
+      } else {
+        params.delete('q');
       }
-      const newUrl = `${pathname}${value ? `?${params.toString()}` : ''}`;
-      router.push(newUrl);
-    }, 1);
-    return () => clearTimeout(timeoutId);
+
+      // Construct the new URL
+      const newUrl = `${pathname}${
+        params.toString() ? `?${params.toString()}` : ''
+      }`;
+
+      // Update the URL without causing a full page reload
+      router.replace(newUrl);
+    }, 500); // Increased debounce time for better performance
   };
+
+  // Client-side filtering based on search query
+  const filteredAccountSummaries = useMemo(() => {
+    if (!inputValue) return accountSummaries;
+
+    return accountSummaries
+      .map((accountSummary) => {
+        try {
+          const regex = new RegExp(inputValue, 'i'); // Case-insensitive regex
+
+          // Check if the account itself matches
+          const accountMatches =
+            regex.test(accountSummary.displayName) ||
+            regex.test(accountSummary.account);
+
+          // Filter property summaries that match the search query
+          const filteredPropertySummaries =
+            accountSummary.propertySummaries?.filter(
+              (propertySummary: any) =>
+                regex.test(propertySummary.displayName) ||
+                regex.test(propertySummary.property)
+            ) || [];
+
+          // Return the account with only matching properties
+          // Or return null if neither the account nor any properties match
+          return accountMatches || filteredPropertySummaries.length > 0
+            ? {
+                ...accountSummary,
+                propertySummaries: filteredPropertySummaries,
+              }
+            : null;
+        } catch (e) {
+          // If the regex is invalid, fallback to a simple includes check
+          const lowerQuery = inputValue.toLowerCase();
+
+          // Check if the account itself matches
+          const accountMatches =
+            accountSummary.displayName?.toLowerCase().includes(lowerQuery) ||
+            accountSummary.account?.toLowerCase().includes(lowerQuery);
+
+          // Filter property summaries that match the search query
+          const filteredPropertySummaries =
+            accountSummary.propertySummaries?.filter(
+              (propertySummary: any) =>
+                propertySummary.displayName
+                  ?.toLowerCase()
+                  .includes(lowerQuery) ||
+                propertySummary.property?.toLowerCase().includes(lowerQuery)
+            ) || [];
+
+          // Return the account with only matching properties
+          // Or return null if neither the account nor any properties match
+          return accountMatches || filteredPropertySummaries.length > 0
+            ? {
+                ...accountSummary,
+                propertySummaries: filteredPropertySummaries,
+              }
+            : null;
+        }
+      })
+      .filter(Boolean); // Remove null values
+  }, [accountSummaries, inputValue]);
 
   return (
     <div>
@@ -77,7 +158,7 @@ export default function AccountSummariesClient({
         onValueChange={(keys) => setOpenKeys(keys)}
         className="space-y-4"
       >
-        {accountSummaries.map((accountSummary) => (
+        {filteredAccountSummaries.map((accountSummary) => (
           <AccountSummary
             key={accountSummary.account?.split('/')[1]}
             accountSummary={accountSummary}
