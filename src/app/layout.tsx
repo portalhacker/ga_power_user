@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
 import Link from 'next/link';
 import './globals.css';
 
@@ -8,12 +7,8 @@ import { ThemeProvider } from '@/components/features/darkMode/themeProvider';
 import { ThemeToggle } from '@/components/features/darkMode/themeToggle';
 import { Toaster } from '@/components/ui/sonner';
 
-import { auth } from '@/lib/auth/auth';
-
-const inter = Inter({ subsets: ['latin'] });
-
 export const metadata: Metadata = {
-  title: 'GA Power User',
+  title: 'GA Power',
   description: 'Supercharge your Google Analytics workflows',
 };
 
@@ -22,7 +17,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await auth();
   return (
     <html lang="en" suppressHydrationWarning>
       <body>

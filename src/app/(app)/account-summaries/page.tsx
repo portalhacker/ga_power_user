@@ -1,6 +1,11 @@
+import type { Metadata } from 'next';
 import { Suspense } from 'react';
 
 import AccountSummaries from '@/src/components/features/account-management/components/account-summaries';
+
+export const metadata: Metadata = {
+  title: 'GA Power - Accounts',
+};
 
 export default async function Page({
   searchParams,
