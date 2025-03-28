@@ -89,14 +89,19 @@ export default function AccountSummariesClient({
                 regex.test(propertySummary.property)
             ) || [];
 
-          // Return the account with only matching properties
-          // Or return null if neither the account nor any properties match
-          return accountMatches || filteredPropertySummaries.length > 0
-            ? {
-                ...accountSummary,
-                propertySummaries: filteredPropertySummaries,
-              }
-            : null;
+          // If account matches, return all properties
+          // If only some properties match, return just those properties
+          // If neither account nor properties match, return null
+          if (accountMatches) {
+            return accountSummary; // Return account with all its properties
+          } else if (filteredPropertySummaries.length > 0) {
+            return {
+              ...accountSummary,
+              propertySummaries: filteredPropertySummaries,
+            };
+          } else {
+            return null;
+          }
         } catch (e) {
           // If the regex is invalid, fallback to a simple includes check
           const lowerQuery = inputValue.toLowerCase();
@@ -116,14 +121,19 @@ export default function AccountSummariesClient({
                 propertySummary.property?.toLowerCase().includes(lowerQuery)
             ) || [];
 
-          // Return the account with only matching properties
-          // Or return null if neither the account nor any properties match
-          return accountMatches || filteredPropertySummaries.length > 0
-            ? {
-                ...accountSummary,
-                propertySummaries: filteredPropertySummaries,
-              }
-            : null;
+          // If account matches, return all properties
+          // If only some properties match, return just those properties
+          // If neither account nor properties match, return null
+          if (accountMatches) {
+            return accountSummary; // Return account with all its properties
+          } else if (filteredPropertySummaries.length > 0) {
+            return {
+              ...accountSummary,
+              propertySummaries: filteredPropertySummaries,
+            };
+          } else {
+            return null;
+          }
         }
       })
       .filter(Boolean); // Remove null values
