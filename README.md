@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Vision
 
-## Getting Started
+Some features are unavailable in the GA4 user interface but can be done using public APIs.
 
-First, run the development server:
+Features that are not covered by official clients like Looker Studio or [Google Analytics Utilities](https://github.com/google/google-analytics-utilities) are leaving room for opportunities (example: monitor property configurations and alert when changes occur).
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Such features can be developped with custom scripts or no/low-code tools, however the technical barrier remains high to most users.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+A micro SaaS with an clean user interface removes that barrier.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+# Audience
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+This product mainly target 2 personas:
 
-## Learn More
+- Owner
+- Consultant
 
-To learn more about Next.js, take a look at the following resources:
+This product mainly target x oganization types:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Individual: Hobbyists and solo-entrepreneurs
+- Companies: A brand or group of brands following their properties
+- Agencies: Following other companies' properties
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+# Pricing
 
-## Deploy on Vercel
+## Model
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Subscripition: 1 
+Usage: easier to convert users, but harder to implement and predict revenue.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Every user can access all features.
+
+1 property check can cost $0.10
+
+## Strategy
+
+At least 2 tiers are required, with a maximum of 4 tiers showed at once to reduce complexity.
+
+The pricing can be based on the following levers:
+
+- Number of properties
+- Number of features
+- Number of users
+
+Start simple without team or multi-user features, and add them later.
+
+- 
