@@ -95,6 +95,54 @@ export const accounts_table_columns: ColumnDef<Account>[] = [
     },
   },
   {
+    accessorKey: 'propertySummaries',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Properties count
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const properties = row.getValue(
+        'propertySummaries'
+      ) as Account['propertySummaries'];
+      if (!properties) {
+        return <p>0</p>;
+      }
+      const sortedProperties = sortArrayByProperty(properties, 'displayName');
+      return (
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <p>{properties?.length ?? 0}</p>
+            </TooltipTrigger>
+            <TooltipContent>
+              {properties?.length == 0 ? (
+                <p>No properties found</p>
+              ) : (
+                <ul>
+                  {sortedProperties?.map((property) => {
+                    return (
+                      <li key={property.property}>
+                        {property.property?.split('/')[1]} -{' '}
+                        {property.displayName}
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      );
+    },
+  },
+  {
     accessorKey: 'createTime',
     header: ({ column }) => {
       return (
@@ -143,53 +191,5 @@ export const accounts_table_columns: ColumnDef<Account>[] = [
   {
     accessorKey: 'gmpOrganization',
     header: 'GMP Organization',
-  },
-  {
-    accessorKey: 'propertySummaries',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          Properties count
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => {
-      const properties = row.getValue(
-        'propertySummaries'
-      ) as Account['propertySummaries'];
-      if (!properties) {
-        return <p>0</p>;
-      }
-      const sortedProperties = sortArrayByProperty(properties, 'displayName');
-      return (
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <p>{properties?.length ?? 0}</p>
-            </TooltipTrigger>
-            <TooltipContent>
-              {properties?.length == 0 ? (
-                <p>No properties found</p>
-              ) : (
-                <ul>
-                  {sortedProperties?.map((property) => {
-                    return (
-                      <li key={property.property}>
-                        {property.property?.split('/')[1]} -{' '}
-                        {property.displayName}
-                      </li>
-                    );
-                  })}
-                </ul>
-              )}
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      );
-    },
   },
 ];
