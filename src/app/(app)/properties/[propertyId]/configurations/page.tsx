@@ -42,13 +42,13 @@ export default async function Page({
   });
 
   const propertyDetails = await client.getProperty(propertyId);
-  const allPropertySettings = await client.getAllPropertySettings(propertyId);
+  // const allPropertySettings = await client.getAllPropertySettings(propertyId);
 
   return (
     <>
       <div>My Property: {propertyId}</div>
       {/* <pre>{JSON.stringify(propertyDetails, null, 2)}</pre> */}
-      <pre>{JSON.stringify(allPropertySettings, null, 2)}</pre>
+      {/* <pre>{JSON.stringify(allPropertySettings, null, 2)}</pre> */}
     </>
   );
 }
