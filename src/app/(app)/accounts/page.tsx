@@ -8,6 +8,7 @@ import { prisma } from '@/src/lib/db/prisma';
 
 import { AccountsTable } from '@/src/components/features/account-management/components/accounts-table';
 import { accounts_table_columns } from '@/src/components/features/account-management/components/accounts-table-columns';
+import { sortArrayByProperty } from '@/src/lib/utils';
 
 export const metadata: Metadata = {
   title: 'GA Power - Accounts',
@@ -59,23 +60,21 @@ export default async function Page({
     return <p>No Google Analytics accounts found.</p>;
   }
   const accountSummaries = await client.listAccountSummaries();
-  // console.log('accountSummaries', accountSummaries);
   for (let i = 0; i < accounts.length; i++) {
     const account = accounts[i];
     const accountSummary = accountSummaries.find(
       (summary) => summary.account === account.name
     );
-    // console.log('accountSummary', accountSummary);
-    // console.log('account', account);
     if (accountSummary) {
       accounts[i] = { ...account, ...accountSummary };
     }
   }
+  const sortedAccounts = sortArrayByProperty(accounts, 'displayName');
 
   return (
     <div>
       <Suspense fallback={<p>Loading...</p>}>
-        <AccountsTable columns={accounts_table_columns} data={accounts} />
+        <AccountsTable columns={accounts_table_columns} data={sortedAccounts} />
       </Suspense>
     </div>
   );

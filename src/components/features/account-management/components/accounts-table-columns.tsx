@@ -1,7 +1,6 @@
 'use client';
 
 import { protos } from '@google-analytics/admin';
-
 import { ColumnDef } from '@tanstack/react-table';
 
 import {
@@ -11,6 +10,8 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import BadgeClipboard from '@/src/components/ui/badge-clipboard';
+
+import { sortArrayByProperty } from '@/src/lib/utils';
 
 type Account = protos.google.analytics.admin.v1alpha.IAccount &
   protos.google.analytics.admin.v1alpha.IAccountSummary;
@@ -35,7 +36,7 @@ export const accounts_table_columns: ColumnDef<Account>[] = [
     accessorKey: 'regionCode',
     header: 'Region Code',
     cell: ({ row }) => {
-      let regionCode;
+      let regionCode = '';
       switch (row.getValue('regionCode') as Account['regionCode']) {
         case 'CA':
           regionCode = '🇨🇦';
@@ -44,7 +45,8 @@ export const accounts_table_columns: ColumnDef<Account>[] = [
           regionCode = '🇺🇸';
           break;
         default:
-          regionCode = row.getValue('regionCode') as Account['regionCode'];
+          regionCode =
+            (row.getValue('regionCode') as Account['regionCode']) ?? '';
       }
       return (
         <TooltipProvider>
@@ -97,6 +99,10 @@ export const accounts_table_columns: ColumnDef<Account>[] = [
       const properties = row.getValue(
         'propertySummaries'
       ) as Account['propertySummaries'];
+      if (!properties) {
+        return <p>0</p>;
+      }
+      const sortedProperties = sortArrayByProperty(properties, 'displayName');
       return (
         <TooltipProvider>
           <Tooltip>
@@ -104,11 +110,11 @@ export const accounts_table_columns: ColumnDef<Account>[] = [
               <p>{properties?.length ?? 0}</p>
             </TooltipTrigger>
             <TooltipContent>
-              {properties?.length === 0 ? (
+              {properties?.length == 0 ? (
                 <p>No properties found</p>
               ) : (
                 <ul>
-                  {properties?.map((property) => {
+                  {sortedProperties?.map((property) => {
                     return (
                       <li key={property.property}>
                         {property.property?.split('/')[1]} -{' '}
