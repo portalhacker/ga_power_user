@@ -12,7 +12,8 @@ import {
 } from '@/components/ui/tooltip';
 import BadgeClipboard from '@/src/components/ui/badge-clipboard';
 
-type Account = protos.google.analytics.admin.v1alpha.IAccount;
+type Account = protos.google.analytics.admin.v1alpha.IAccount &
+  protos.google.analytics.admin.v1alpha.IAccountSummary;
 
 export const accounts_table_columns: ColumnDef<Account>[] = [
   {
@@ -110,7 +111,7 @@ export const accounts_table_columns: ColumnDef<Account>[] = [
                   {properties?.map((property) => {
                     return (
                       <li key={property.property}>
-                        {property.property.split('/')[1]} -{' '}
+                        {property.property?.split('/')[1]} -{' '}
                         {property.displayName}
                       </li>
                     );
