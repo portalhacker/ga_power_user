@@ -2,6 +2,7 @@
 
 import { protos } from '@google-analytics/admin';
 import { ColumnDef } from '@tanstack/react-table';
+import { ArrowUpDown } from 'lucide-react';
 
 import {
   Tooltip,
@@ -11,6 +12,7 @@ import {
 } from '@/components/ui/tooltip';
 import BadgeClipboard from '@/src/components/ui/badge-clipboard';
 
+import { Button } from '@/src/components/ui/button';
 import { sortArrayByProperty } from '@/src/lib/utils';
 
 type Account = protos.google.analytics.admin.v1alpha.IAccount &
@@ -19,7 +21,17 @@ type Account = protos.google.analytics.admin.v1alpha.IAccount &
 export const accounts_table_columns: ColumnDef<Account>[] = [
   {
     accessorKey: 'name',
-    header: 'Id',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Id
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => {
       return (
         <BadgeClipboard variant={'secondary'}>
@@ -30,11 +42,31 @@ export const accounts_table_columns: ColumnDef<Account>[] = [
   },
   {
     accessorKey: 'displayName',
-    header: 'Display Name',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Name
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
   },
   {
     accessorKey: 'regionCode',
-    header: 'Region Code',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Country
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => {
       let regionCode = '';
       switch (row.getValue('regionCode') as Account['regionCode']) {
@@ -64,7 +96,17 @@ export const accounts_table_columns: ColumnDef<Account>[] = [
   },
   {
     accessorKey: 'createTime',
-    header: 'Created at',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Created at
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => {
       return new Date(
         Number(
@@ -75,7 +117,17 @@ export const accounts_table_columns: ColumnDef<Account>[] = [
   },
   {
     accessorKey: 'updateTime',
-    header: 'Updated at',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Updated at
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => {
       return new Date(
         Number(
@@ -94,7 +146,17 @@ export const accounts_table_columns: ColumnDef<Account>[] = [
   },
   {
     accessorKey: 'propertySummaries',
-    header: 'Properties count',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Properties count
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => {
       const properties = row.getValue(
         'propertySummaries'
