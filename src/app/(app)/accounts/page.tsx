@@ -58,6 +58,19 @@ export default async function Page({
   if (accounts.length === 0) {
     return <p>No Google Analytics accounts found.</p>;
   }
+  const accountSummaries = await client.listAccountSummaries();
+  // console.log('accountSummaries', accountSummaries);
+  for (let i = 0; i < accounts.length; i++) {
+    const account = accounts[i];
+    const accountSummary = accountSummaries.find(
+      (summary) => summary.account === account.name
+    );
+    // console.log('accountSummary', accountSummary);
+    // console.log('account', account);
+    if (accountSummary) {
+      accounts[i] = { ...account, ...accountSummary };
+    }
+  }
 
   return (
     <div>

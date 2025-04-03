@@ -89,4 +89,38 @@ export const accounts_table_columns: ColumnDef<Account>[] = [
     accessorKey: 'gmpOrganization',
     header: 'GMP Organization',
   },
+  {
+    accessorKey: 'propertySummaries',
+    header: 'Properties count',
+    cell: ({ row }) => {
+      const properties = row.getValue(
+        'propertySummaries'
+      ) as Account['propertySummaries'];
+      return (
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <p>{properties?.length ?? 0}</p>
+            </TooltipTrigger>
+            <TooltipContent>
+              {properties?.length === 0 ? (
+                <p>No properties found</p>
+              ) : (
+                <ul>
+                  {properties?.map((property) => {
+                    return (
+                      <li key={property.property}>
+                        {property.property.split('/')[1]} -{' '}
+                        {property.displayName}
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      );
+    },
+  },
 ];
