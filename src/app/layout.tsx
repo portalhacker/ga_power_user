@@ -30,7 +30,8 @@ export default async function RootLayout({
             <nav className="flex justify-between mb-4 items-center">
               <div className="flex gap-2">
                 <Link href="/">Home</Link>
-                <Link href="/account-summaries">Accounts</Link>
+                <Link href="/account-summaries">Account summaries</Link>
+                <Link href="/accounts">Accounts</Link>
               </div>
               <div className="flex gap-2 items-center">
                 <ThemeToggle />

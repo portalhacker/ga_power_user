@@ -22,6 +22,16 @@ export class GoogleAnalyticsClient {
     }
   }
 
+  async listAccounts() {
+    try {
+      const [accounts] = await this.client.listAccounts();
+      return accounts || [];
+    } catch (error) {
+      console.error('Failed to fetch accounts', error);
+      throw new Error('Failed to fetch accounts');
+    }
+  }
+
   async getProperty(propertyId: number) {
     try {
       const [property] = await this.client.getProperty({
