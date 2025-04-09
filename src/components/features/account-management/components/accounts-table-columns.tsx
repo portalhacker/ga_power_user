@@ -13,6 +13,7 @@ import BadgeClipboard from '@/src/components/ui/badge-clipboard';
 
 import { sortArrayByProperty } from '@/src/lib/utils';
 import { AccountsTableColumnHeader } from './accounts-table-column-header';
+import { AccountsTableRowCell } from './accounts-table-row-cell';
 
 type Account = protos.google.analytics.admin.v1alpha.IAccount &
   protos.google.analytics.admin.v1alpha.IAccountSummary;
@@ -34,7 +35,9 @@ export const accounts_table_columns: ColumnDef<Account>[] = [
     header: ({ column }) => (
       <AccountsTableColumnHeader column={column} title="Name" />
     ),
-    cell: ({ row }) => <p className="mx-3">{row.getValue('displayName')}</p>,
+    cell: ({ row }) => (
+      <AccountsTableRowCell>{row.getValue('displayName')}</AccountsTableRowCell>
+    ),
   },
   {
     accessorKey: 'regionCode',
@@ -58,7 +61,9 @@ export const accounts_table_columns: ColumnDef<Account>[] = [
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <p className="text-center mx-3">{regionCode}</p>
+              <AccountsTableRowCell className="text-center">
+                {regionCode}
+              </AccountsTableRowCell>
             </TooltipTrigger>
             <TooltipContent>
               <p>{row.getValue('regionCode')}</p>
@@ -85,7 +90,9 @@ export const accounts_table_columns: ColumnDef<Account>[] = [
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <p className="text-center mx-3">{properties?.length ?? 0}</p>
+              <AccountsTableRowCell className="text-center">
+                {properties?.length ?? 0}
+              </AccountsTableRowCell>
             </TooltipTrigger>
             <TooltipContent>
               {properties?.length == 0 ? (
@@ -119,7 +126,7 @@ export const accounts_table_columns: ColumnDef<Account>[] = [
           (row.getValue('createTime') as Account['createTime'])?.seconds ?? 0
         ) * 1000
       ).toISOString();
-      return <p className="mx-3">{createdAt}</p>;
+      return <AccountsTableRowCell>{createdAt}</AccountsTableRowCell>;
     },
   },
   {
@@ -133,7 +140,7 @@ export const accounts_table_columns: ColumnDef<Account>[] = [
           (row.getValue('updateTime') as Account['updateTime'])?.seconds ?? 0
         ) * 1000
       ).toISOString();
-      return <p className="mx-3">{updatedAt}</p>;
+      return <AccountsTableRowCell>{updatedAt}</AccountsTableRowCell>;
     },
   },
   {
@@ -141,7 +148,11 @@ export const accounts_table_columns: ColumnDef<Account>[] = [
     header: ({ column }) => (
       <AccountsTableColumnHeader column={column} title="Is deleted" />
     ),
-    cell: ({ row }) => <p className="mx-3">{row.getValue('deleted')}</p>,
+    cell: ({ row }) => (
+      <AccountsTableRowCell className="text-center">
+        {row.getValue('deleted')}
+      </AccountsTableRowCell>
+    ),
   },
   {
     accessorKey: 'gmpOrganization',
@@ -149,7 +160,9 @@ export const accounts_table_columns: ColumnDef<Account>[] = [
       <AccountsTableColumnHeader column={column} title="GMP Organization" />
     ),
     cell: ({ row }) => (
-      <p className="mx-3">{row.getValue('gmpOrganization')}</p>
+      <AccountsTableRowCell>
+        {row.getValue('gmpOrganization')}
+      </AccountsTableRowCell>
     ),
   },
 ];
