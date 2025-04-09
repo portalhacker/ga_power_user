@@ -25,13 +25,27 @@ export default async function Page({
   const searchQuery = (await searchParams).q;
 
   const session = await auth();
-  if (
-    !session ||
-    session === null ||
-    !session.user ||
-    session?.error === 'RefreshTokenError'
-  ) {
-    return <SignIn />;
+  if (!session || session === null || !session.user) {
+    return (
+      <>
+        <p>Not looged-in</p>
+        <SignIn />
+      </>
+    );
+  } else if (session?.error === 'RefreshTokenError' && session?.user?.id) {
+    const res = await prisma.account.deleteMany({
+      where: {
+        userId: session.user.id,
+        provider: 'google',
+      },
+    });
+    console.log('Deleted expired tokens:', res);
+    return (
+      <>
+        <p>Refresh token expired. Please re-authenticate.</p>
+        <SignIn />
+      </>
+    );
   }
 
   const tokens = await prisma.account.findFirst({
@@ -46,7 +60,12 @@ export default async function Page({
   });
 
   if (!tokens || !tokens.refresh_token || !tokens.access_token) {
-    return <p>No valid Google Analytics credentials.</p>;
+    return (
+      <>
+        <p>No valid Google Analytics credentials.</p>
+        <SignIn />
+      </>
+    );
   }
 
   // Initialize the GoogleAnalyticsClient class
