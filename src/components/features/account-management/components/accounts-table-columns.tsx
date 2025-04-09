@@ -2,7 +2,6 @@
 
 import { protos } from '@google-analytics/admin';
 import { ColumnDef } from '@tanstack/react-table';
-import { ArrowUpDown } from 'lucide-react';
 
 import {
   Tooltip,
@@ -12,8 +11,8 @@ import {
 } from '@/components/ui/tooltip';
 import BadgeClipboard from '@/src/components/ui/badge-clipboard';
 
-import { Button } from '@/src/components/ui/button';
 import { sortArrayByProperty } from '@/src/lib/utils';
+import { AccountsTableColumnHeader } from './accounts-table-column-header';
 
 type Account = protos.google.analytics.admin.v1alpha.IAccount &
   protos.google.analytics.admin.v1alpha.IAccountSummary;
@@ -21,52 +20,27 @@ type Account = protos.google.analytics.admin.v1alpha.IAccount &
 export const accounts_table_columns: ColumnDef<Account>[] = [
   {
     accessorKey: 'name',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          Id
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => {
-      return (
-        <BadgeClipboard variant={'secondary'}>
-          {((row.getValue('name') as Account['name']) ?? '').split('/')[1]}
-        </BadgeClipboard>
-      );
-    },
+    header: ({ column }) => (
+      <AccountsTableColumnHeader column={column} title="Id" />
+    ),
+    cell: ({ row }) => (
+      <BadgeClipboard variant={'secondary'}>
+        {((row.getValue('name') as Account['name']) ?? '').split('/')[1]}
+      </BadgeClipboard>
+    ),
   },
   {
     accessorKey: 'displayName',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          Name
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: ({ column }) => (
+      <AccountsTableColumnHeader column={column} title="Name" />
+    ),
+    cell: ({ row }) => <p className="mx-3">{row.getValue('displayName')}</p>,
   },
   {
     accessorKey: 'regionCode',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          Country
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: ({ column }) => (
+      <AccountsTableColumnHeader column={column} title="Country" />
+    ),
     cell: ({ row }) => {
       let regionCode = '';
       switch (row.getValue('regionCode') as Account['regionCode']) {
@@ -84,7 +58,7 @@ export const accounts_table_columns: ColumnDef<Account>[] = [
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <p>{regionCode}</p>
+              <p className="text-center mx-3">{regionCode}</p>
             </TooltipTrigger>
             <TooltipContent>
               <p>{row.getValue('regionCode')}</p>
@@ -96,17 +70,9 @@ export const accounts_table_columns: ColumnDef<Account>[] = [
   },
   {
     accessorKey: 'propertySummaries',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          Properties count
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: ({ column }) => (
+      <AccountsTableColumnHeader column={column} title="Properties" />
+    ),
     cell: ({ row }) => {
       const properties = row.getValue(
         'propertySummaries'
@@ -119,7 +85,7 @@ export const accounts_table_columns: ColumnDef<Account>[] = [
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <p>{properties?.length ?? 0}</p>
+              <p className="text-center mx-3">{properties?.length ?? 0}</p>
             </TooltipTrigger>
             <TooltipContent>
               {properties?.length == 0 ? (
@@ -144,52 +110,46 @@ export const accounts_table_columns: ColumnDef<Account>[] = [
   },
   {
     accessorKey: 'createTime',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          Created at
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: ({ column }) => (
+      <AccountsTableColumnHeader column={column} title="Created at" />
+    ),
     cell: ({ row }) => {
-      return new Date(
+      const createdAt = new Date(
         Number(
           (row.getValue('createTime') as Account['createTime'])?.seconds ?? 0
         ) * 1000
       ).toISOString();
+      return <p className="mx-3">{createdAt}</p>;
     },
   },
   {
     accessorKey: 'updateTime',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          Updated at
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: ({ column }) => (
+      <AccountsTableColumnHeader column={column} title="Updated at" />
+    ),
     cell: ({ row }) => {
-      return new Date(
+      const updatedAt = new Date(
         Number(
           (row.getValue('updateTime') as Account['updateTime'])?.seconds ?? 0
         ) * 1000
       ).toISOString();
+      return <p className="mx-3">{updatedAt}</p>;
     },
   },
   {
     accessorKey: 'deleted',
-    header: 'Is Deleted',
+    header: ({ column }) => (
+      <AccountsTableColumnHeader column={column} title="Is deleted" />
+    ),
+    cell: ({ row }) => <p className="mx-3">{row.getValue('deleted')}</p>,
   },
   {
     accessorKey: 'gmpOrganization',
-    header: 'GMP Organization',
+    header: ({ column }) => (
+      <AccountsTableColumnHeader column={column} title="GMP Organization" />
+    ),
+    cell: ({ row }) => (
+      <p className="mx-3">{row.getValue('gmpOrganization')}</p>
+    ),
   },
 ];
