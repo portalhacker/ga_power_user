@@ -61,9 +61,7 @@ export const accounts_table_columns: ColumnDef<Account>[] = [
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <AccountsTableRowCell className="text-center">
-                {regionCode}
-              </AccountsTableRowCell>
+              <p className="mx-3 text-center">{regionCode}</p>
             </TooltipTrigger>
             <TooltipContent>
               <p>{row.getValue('regionCode')}</p>
@@ -90,9 +88,7 @@ export const accounts_table_columns: ColumnDef<Account>[] = [
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <AccountsTableRowCell className="text-center">
-                {properties?.length ?? 0}
-              </AccountsTableRowCell>
+              <p className="mx-3 text-center">{properties?.length ?? 0}</p>
             </TooltipTrigger>
             <TooltipContent>
               {properties?.length == 0 ? (
