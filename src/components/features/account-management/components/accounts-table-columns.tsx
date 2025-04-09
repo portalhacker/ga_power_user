@@ -166,3 +166,14 @@ export const accounts_table_columns: ColumnDef<Account>[] = [
     ),
   },
 ];
+
+export const accounts_table_columns_initial_visibility = {
+  name: true,
+  displayName: true,
+  regionCode: true,
+  createTime: false,
+  updateTime: false,
+  deleted: false,
+  gmpOrganization: false,
+  propertySummaries: true,
+};

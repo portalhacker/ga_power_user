@@ -34,27 +34,20 @@ import { Button } from '@/src/components/ui/button';
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  initialVisibility?: VisibilityState;
 }
 
 export function AccountsTable<TData, TValue>({
   columns,
   data,
+  initialVisibility,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({
-      name: true,
-      displayName: true,
-      regionCode: true,
-      createTime: false,
-      updateTime: false,
-      deleted: false,
-      gmpOrganization: false,
-      propertySummaries: true,
-    });
+    React.useState<VisibilityState>(initialVisibility || {});
 
   const table = useReactTable({
     data,

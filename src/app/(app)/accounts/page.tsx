@@ -7,7 +7,10 @@ import { GoogleAnalyticsClient } from '@/lib/google/analytics/google-analytics-c
 import { prisma } from '@/src/lib/db/prisma';
 
 import { AccountsTable } from '@/src/components/features/account-management/components/accounts-table';
-import { accounts_table_columns } from '@/src/components/features/account-management/components/accounts-table-columns';
+import {
+  accounts_table_columns,
+  accounts_table_columns_initial_visibility,
+} from '@/src/components/features/account-management/components/accounts-table-columns';
 import { sortArrayByProperty } from '@/src/lib/utils';
 
 export const metadata: Metadata = {
@@ -74,7 +77,11 @@ export default async function Page({
   return (
     <div>
       <Suspense fallback={<p>Loading...</p>}>
-        <AccountsTable columns={accounts_table_columns} data={sortedAccounts} />
+        <AccountsTable
+          columns={accounts_table_columns}
+          data={sortedAccounts}
+          initialVisibility={accounts_table_columns_initial_visibility}
+        />
       </Suspense>
     </div>
   );
