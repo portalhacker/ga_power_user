@@ -6,7 +6,7 @@ import { auth } from '@/lib/auth/auth';
 import { GoogleAnalyticsClient } from '@/lib/google/analytics/google-analytics-client';
 import { prisma } from '@/src/lib/db/prisma';
 
-import { AccountsTable } from '@/src/components/features/account-management/components/accounts-table';
+import { DataTable } from '@/src/components/common/data-table';
 import {
   accounts_table_columns,
   accounts_table_columns_initial_visibility,
@@ -96,7 +96,7 @@ export default async function Page({
   return (
     <div>
       <Suspense fallback={<p>Loading...</p>}>
-        <AccountsTable
+        <DataTable
           columns={accounts_table_columns}
           data={sortedAccounts}
           initialVisibility={accounts_table_columns_initial_visibility}

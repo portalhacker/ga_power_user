@@ -6,7 +6,7 @@ interface DataTableRowCellProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
 }
 
-export function AccountsTableRowCell({
+export function DataTableRowCell({
   children,
   className,
 }: DataTableRowCellProps) {

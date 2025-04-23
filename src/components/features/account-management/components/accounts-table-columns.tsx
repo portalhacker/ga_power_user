@@ -11,9 +11,9 @@ import {
 } from '@/components/ui/tooltip';
 import BadgeClipboard from '@/src/components/ui/badge-clipboard';
 
+import { DataTableColumnHeader } from '@/components/common/data-table-column-header';
+import { DataTableRowCell } from '@/components/common/data-table-row-cell';
 import { sortArrayByProperty } from '@/src/lib/utils';
-import { AccountsTableColumnHeader } from './accounts-table-column-header';
-import { AccountsTableRowCell } from './accounts-table-row-cell';
 
 type Account = protos.google.analytics.admin.v1alpha.IAccount &
   protos.google.analytics.admin.v1alpha.IAccountSummary;
@@ -22,7 +22,7 @@ export const accounts_table_columns: ColumnDef<Account>[] = [
   {
     accessorKey: 'name',
     header: ({ column }) => (
-      <AccountsTableColumnHeader column={column} title="Id" />
+      <DataTableColumnHeader column={column} title="Id" />
     ),
     cell: ({ row }) => (
       <BadgeClipboard variant={'secondary'}>
@@ -33,16 +33,16 @@ export const accounts_table_columns: ColumnDef<Account>[] = [
   {
     accessorKey: 'displayName',
     header: ({ column }) => (
-      <AccountsTableColumnHeader column={column} title="Name" />
+      <DataTableColumnHeader column={column} title="Name" />
     ),
     cell: ({ row }) => (
-      <AccountsTableRowCell>{row.getValue('displayName')}</AccountsTableRowCell>
+      <DataTableRowCell>{row.getValue('displayName')}</DataTableRowCell>
     ),
   },
   {
     accessorKey: 'regionCode',
     header: ({ column }) => (
-      <AccountsTableColumnHeader column={column} title="Country" />
+      <DataTableColumnHeader column={column} title="Country" />
     ),
     cell: ({ row }) => {
       let regionCode = '';
@@ -74,7 +74,7 @@ export const accounts_table_columns: ColumnDef<Account>[] = [
   {
     accessorKey: 'propertySummaries',
     header: ({ column }) => (
-      <AccountsTableColumnHeader column={column} title="Properties" />
+      <DataTableColumnHeader column={column} title="Properties" />
     ),
     cell: ({ row }) => {
       const properties = row.getValue(
@@ -114,7 +114,7 @@ export const accounts_table_columns: ColumnDef<Account>[] = [
   {
     accessorKey: 'createTime',
     header: ({ column }) => (
-      <AccountsTableColumnHeader column={column} title="Created at" />
+      <DataTableColumnHeader column={column} title="Created at" />
     ),
     cell: ({ row }) => {
       const createdAt = new Date(
@@ -122,13 +122,13 @@ export const accounts_table_columns: ColumnDef<Account>[] = [
           (row.getValue('createTime') as Account['createTime'])?.seconds ?? 0
         ) * 1000
       ).toISOString();
-      return <AccountsTableRowCell>{createdAt}</AccountsTableRowCell>;
+      return <DataTableRowCell>{createdAt}</DataTableRowCell>;
     },
   },
   {
     accessorKey: 'updateTime',
     header: ({ column }) => (
-      <AccountsTableColumnHeader column={column} title="Updated at" />
+      <DataTableColumnHeader column={column} title="Updated at" />
     ),
     cell: ({ row }) => {
       const updatedAt = new Date(
@@ -136,29 +136,27 @@ export const accounts_table_columns: ColumnDef<Account>[] = [
           (row.getValue('updateTime') as Account['updateTime'])?.seconds ?? 0
         ) * 1000
       ).toISOString();
-      return <AccountsTableRowCell>{updatedAt}</AccountsTableRowCell>;
+      return <DataTableRowCell>{updatedAt}</DataTableRowCell>;
     },
   },
   {
     accessorKey: 'deleted',
     header: ({ column }) => (
-      <AccountsTableColumnHeader column={column} title="Is deleted" />
+      <DataTableColumnHeader column={column} title="Is deleted" />
     ),
     cell: ({ row }) => (
-      <AccountsTableRowCell className="text-center">
+      <DataTableRowCell className="text-center">
         {row.getValue('deleted')}
-      </AccountsTableRowCell>
+      </DataTableRowCell>
     ),
   },
   {
     accessorKey: 'gmpOrganization',
     header: ({ column }) => (
-      <AccountsTableColumnHeader column={column} title="GMP Organization" />
+      <DataTableColumnHeader column={column} title="GMP Organization" />
     ),
     cell: ({ row }) => (
-      <AccountsTableRowCell>
-        {row.getValue('gmpOrganization')}
-      </AccountsTableRowCell>
+      <DataTableRowCell>{row.getValue('gmpOrganization')}</DataTableRowCell>
     ),
   },
 ];

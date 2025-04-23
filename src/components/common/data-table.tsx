@@ -37,7 +37,7 @@ interface DataTableProps<TData, TValue> {
   initialVisibility?: VisibilityState;
 }
 
-export function AccountsTable<TData, TValue>({
+export function DataTable<TData, TValue>({
   columns,
   data,
   initialVisibility,
