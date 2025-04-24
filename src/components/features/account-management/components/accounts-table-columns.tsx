@@ -2,6 +2,7 @@
 
 import { protos } from '@google-analytics/admin';
 import { ColumnDef } from '@tanstack/react-table';
+import Link from 'next/link';
 
 import {
   Tooltip,
@@ -36,7 +37,15 @@ export const accounts_table_columns: ColumnDef<Account>[] = [
       <DataTableColumnHeader column={column} title="Name" />
     ),
     cell: ({ row }) => (
-      <DataTableRowCell>{row.getValue('displayName')}</DataTableRowCell>
+      <DataTableRowCell>
+        <Link
+          href={`/accounts/${
+            ((row.getValue('name') as Account['name']) ?? '').split('/')[1]
+          }`}
+        >
+          {row.getValue('displayName')}
+        </Link>
+      </DataTableRowCell>
     ),
   },
   {

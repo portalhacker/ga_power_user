@@ -32,6 +32,33 @@ export class GoogleAnalyticsClient {
     }
   }
 
+  async getAccount(accountId: number) {
+    try {
+      const [account] = await this.client.getAccount({
+        name: `accounts/${accountId}`,
+      });
+      return account || null;
+    } catch (error) {
+      console.error(`Failed to fetch account with ID ${accountId}`, error);
+      throw new Error(`Failed to fetch account with ID ${accountId}`);
+    }
+  }
+
+  async listProperties(accountId: number) {
+    try {
+      const [properties] = await this.client.listProperties({
+        filter: `parent:accounts/${accountId}`,
+      });
+      return properties || [];
+    } catch (error) {
+      console.error(
+        `Failed to fetch properties for account ID ${accountId}`,
+        error
+      );
+      throw new Error(`Failed to fetch properties for account ID ${accountId}`);
+    }
+  }
+
   async getProperty(propertyId: number) {
     try {
       const [property] = await this.client.getProperty({
